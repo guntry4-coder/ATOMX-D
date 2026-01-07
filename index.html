@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ATOMX D PROJECT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #94a3b8;
+            --sidebar-bg: #0f172a;
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #6366f1;
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --text-main: #f1f5f9;
+            --text-light: #9ca3af;
+            --sidebar-bg: #000000;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; overflow-x: hidden; transition: 0.3s; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        /* --- LOGIN PAGE --- */
+        #loginPage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 5000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: var(--card-bg); padding: 30px; border-radius: 20px;
+            width: 100%; max-width: 350px; box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .login-input-group { position: relative; margin-bottom: 15px; }
+        .login-input {
+            width: 100%; padding: 14px; border: 1px solid #e2e8f0;
+            border-radius: 12px; outline: none; background: var(--bg-color); color: var(--text-main);
+        }
+        .login-eye {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--text-light); cursor: pointer;
+        }
+        .btn-login {
+            width: 100%; padding: 14px; background: var(--primary); color: white;
+            border: none; border-radius: 12px; font-weight: bold; cursor: pointer;
+        }
+
+        /* --- LOADING --- */
+        #loadingScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 4000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #e2e8f0;
+            border-top: 5px solid var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- MAIN APP --- */
+        #mainApp { display: none; }
+
+        header {
+            background-color: var(--card-bg); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+        }
+        .app-title { font-weight: 800; font-size: 1.2rem; color: var(--primary); letter-spacing: 1px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed; left: -280px; top: 0; width: 280px; height: 100%;
+            background-color: var(--sidebar-bg); color: #f3f4f6;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; display: flex; flex-direction: column;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .menu-content { flex-grow: 1; padding-top: 10px; overflow-y: auto; }
+        
+        .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; cursor: pointer; color: #cbd5e1; transition: 0.2s; border-left: 4px solid transparent; }
+        .menu-item.active, .menu-item:active { background: rgba(255,255,255,0.05); border-left-color: var(--primary); color: white; }
+        
+        .sidebar-divider { height: 1px; background: #334155; margin: 10px 20px; }
+        .sidebar-bottom { padding: 20px; border-top: 1px solid #334155; }
+        
+        .action-btn { color: #cbd5e1; padding: 12px 25px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-size: 0.95rem; }
+        .action-btn:active { color: white; }
+        
+        /* Toggle Switch for Haptic */
+        .toggle-switch { position: relative; width: 40px; height: 20px; background: #334155; border-radius: 20px; transition: 0.3s; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; }
+        .toggle-active { background: var(--success); }
+        .toggle-active::after { left: 22px; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; z-index: 999; backdrop-filter: blur(2px); }
+        .overlay.active { display: block; }
+
+        /* --- CONTAINER --- */
+        .container { padding: 20px; max-width: 800px; margin: auto; padding-bottom: 50px; }
+        .page { display: none; animation: fadeIn 0.4s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- DASHBOARD --- */
+        .dashboard-card {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white;
+            padding: 30px 20px; border-radius: 20px; text-align: center;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4); margin-bottom: 20px;
+        }
+        .clock { font-size: 2.8rem; font-weight: 800; }
+        .date { font-size: 1rem; opacity: 0.9; }
+
+        /* --- FORMS --- */
+        .form-group { margin-bottom: 15px; position: relative; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-light); }
+        input {
+            width: 100%; padding: 12px; border: 1px solid var(--text-light);
+            border-radius: 10px; font-size: 1rem; outline: none; background: var(--card-bg); color: var(--text-main);
+        }
+        input:focus { border-color: var(--primary); border-width: 2px; }
+
+        .eye-icon { position: absolute; right: 15px; top: 42px; color: var(--text-light); cursor: pointer; font-size: 1.1rem; }
+
+        .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .chip {
+            padding: 8px 16px; background: var(--bg-color); border: 1px solid var(--text-light);
+            border-radius: 20px; font-size: 0.85rem; cursor: pointer; color: var(--text-main);
+        }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .btn-save {
+            width: 100%; padding: 15px; background: var(--primary); color: white;
+            border: none; border-radius: 12px; font-size: 1rem; font-weight: bold; margin-top: 10px;
+        }
+
+        /* --- LIST --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .card {
+            background: var(--card-bg); padding: 20px; border-radius: 16px;
+            box-shadow: var(--shadow); cursor: pointer; display: flex; align-items: center; gap: 15px;
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.98); }
+        .user-icon {
+            width: 50px; height: 50px; border-radius: 50%; background: #e0e7ff; color: var(--primary);
+            display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+        }
+        .card-title { font-weight: bold; color: var(--text-main); font-size: 1.1rem; }
+        .card-sub { font-size: 0.9rem; color: var(--text-light); margin-top: 2px; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--card-bg); width: 90%; max-width: 380px; border-radius: 24px;
+            padding: 0; position: relative; overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            padding: 30px 20px 40px 20px; text-align: center;
+            background: var(--bg-color); color: white;
+        }
+        
+        .modal-profile-img {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: white; color: #333;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 35px; margin: -40px auto 10px auto;
+            border: 4px solid var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .modal-body { padding: 10px 25px 25px 25px; }
+        .modal-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px dashed var(--text-light);
+        }
+        .modal-label { color: var(--text-light); font-size: 0.9rem; }
+        .modal-val { font-weight: bold; color: var(--text-main); font-size: 1rem; cursor: pointer; }
+        .modal-val:active { color: var(--primary); }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        
+        /* Bank Colors */
+        .bg-kpay { background: #0056b3; }
+        .bg-wave { background: #fbbf24; color: #333 !important; }
+        .bg-uab { background: #000000; }
+        .bg-yoma { background: #dc2626; }
+        .bg-cb { background: linear-gradient(135deg, #000080, #dc2626); }
+        .bg-other { background: var(--primary); }
+
+        /* --- NOTIFICATION --- */
+        .toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #ffffff; color: #333; padding: 15px 25px; border-radius: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px;
+            z-index: 6000; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600; min-width: 200px; justify-content: center;
+        }
+        .toast.show { top: 30px; }
+        .toast.success { border-left: 5px solid var(--success); }
+        .toast.error { border-left: 5px solid var(--danger); }
+
+    </style>
+</head>
+<body>
+
+    <div id="loginPage">
+        <div class="login-card">
+            <h2 style="color:var(--primary); margin-top:0;">ATOMX D LOGIN</h2>
+            <div class="login-input-group">
+                <input type="text" id="loginUser" class="login-input" placeholder="User Name">
+            </div>
+            <div class="login-input-group">
+                <input type="password" id="loginPass" class="login-input" placeholder="Password">
+                <i class="fas fa-eye login-eye" onclick="toggleLoginPass()"></i>
+            </div>
+            <button class="btn-login" onclick="handleLogin()">Log In</button>
+        </div>
+    </div>
+
+    <div id="loadingScreen">
+        <div class="spinner"></div>
+        <p style="color:var(--text-light);">Loading System...</p>
+    </div>
+
+    <div class="toast" id="toast">
+        <i id="toastIcon" class="fas fa-check-circle"></i>
+        <span id="toastMsg">Success</span>
+    </div>
+
+    <div id="mainApp">
+        <header>
+            <i class="fas fa-bars" style="font-size:22px; cursor:pointer;" onclick="toggleSidebar()"></i>
+            <span class="app-title">ATOMX D PROJECT</span>
+            <div style="width:22px;"></div>
+        </header>
+
+        <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <i class="fas fa-times" onclick="toggleSidebar()"></i>
+            </div>
+            
+            <div class="menu-content">
+                <div class="menu-item active" onclick="navTo('dashboardPage', this)"><i class="fas fa-home"></i> Dashboard</div>
+                <div class="menu-item" onclick="navTo('createPage', this)"><i class="fas fa-plus-circle"></i> Create Account</div>
+                <div class="menu-item" onclick="navTo('listPage', this)"><i class="fas fa-list-ul"></i> Account List</div>
+                
+                <div class="sidebar-divider"></div>
+
+                <div class="action-btn" onclick="toggleTheme()">
+                    <i class="fas fa-adjust"></i> Dark / Light Mode
+                </div>
+
+                <div class="action-btn" onclick="toggleHaptic()">
+                    <i class="fas fa-mobile-alt"></i> Haptic Feedback
+                    <div id="hapticSwitch" class="toggle-switch" style="margin-left:auto;"></div>
+                </div>
+                
+                <div class="action-btn" onclick="exportData()">
+                    <i class="fas fa-file-archive"></i> Backup Data (JSON)
+                </div>
+
+                <div class="action-btn" onclick="exportExcel()">
+                    <i class="fas fa-file-excel"></i> Export Excel (CSV)
+                </div>
+                
+                <label class="action-btn">
+                    <i class="fas fa-upload"></i> Restore Data
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+                </label>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="action-btn" style="color:var(--danger);" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="dashboardPage" class="page active">
+                <div class="dashboard-card">
+                    <div class="clock" id="clock">00:00</div>
+                    <div class="date" id="date">Mon, 1 Jan</div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div style="background:var(--card-bg); padding:20px; border-radius:15px; text-align:center; box-shadow:var(--shadow);">
+                        <div style="font-size:2rem; font-weight:bold; color:var(--primary);" id="totalCount">0</div>
+                        <div style="color:var(--text-light); font-size:0.9rem;">Total</div>
+                    </div>
+                    <div style="background:var(--card-bg); padding:20px; border-radius:15px; text-align:center; box-shadow:var(--shadow);">
+                        <div style="font-size:2rem; font-weight:bold; color:var(--success);" id="todayCount">0</div>
+                        <div style="color:var(--text-light); font-size:0.9rem;">Today</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="createPage" class="page">
+                <h2 id="formTitle" style="margin-bottom:20px;">Create Account</h2>
+                <input type="hidden" id="editId">
+                
+                <div class="form-group"><label>Name</label><input type="text" id="name" placeholder="Name"></div>
+                <div class="form-group"><label>Bank Number</label><input type="tel" id="bankNum" placeholder="Bank Number"></div>
+                <div class="form-group"><label>NRC</label><input type="text" id="nrc" placeholder="NRC"></div>
+                
+                <div class="form-group">
+                    <label>PIN</label>
+                    <input type="password" id="pin" placeholder="PIN">
+                    <i class="fas fa-eye eye-icon" onclick="toggleFormPin()"></i>
+                </div>
+                
+                <div class="form-group"><label>Auto No.</label><input type="text" id="autoNo" placeholder="Auto No."></div>
+
+                <div class="form-group">
+                    <label>Platform</label>
+                    <div class="chips">
+                        <span class="chip" onclick="setPlatform(this, 'KBZPay')">KBZPay</span>
+                        <span class="chip" onclick="setPlatform(this, 'Wave Money')">Wave Money</span>
+                        <span class="chip" onclick="setPlatform(this, 'CB Pay')">CB Pay</span>
+                        <span class="chip" onclick="setPlatform(this, 'UAB Pay')">UAB Pay</span>
+                        <span class="chip" onclick="setPlatform(this, 'Yoma Bank')">Yoma Bank</span>
+                        <span class="chip" onclick="setPlatform(this, 'Other')">Other</span>
+                    </div>
+                    <input type="hidden" id="platform">
+                </div>
+
+                <button class="btn-save" id="saveBtn" onclick="saveData()">Create Account</button>
+                <button class="btn-save" style="background:var(--text-light); display:none;" id="cancelBtn" onclick="resetForm()">Cancel</button>
+            </div>
+
+            <div id="listPage" class="page">
+                <h2 style="margin-bottom:20px;">Account List</h2>
+                <div class="form-group" style="position:relative;">
+                    <i class="fas fa-search" style="position:absolute; left:15px; top:12px; color:var(--text-light);"></i>
+                    <input type="text" id="searchBox" placeholder="" style="padding-left:40px;" onkeyup="renderList()">
+                </div>
+                <div id="gridContainer" class="grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div id="modalHeaderBg" class="modal-header">
+                <h3 id="modalName" style="margin:0; font-size:1.4rem;">Name</h3>
+                <span id="modalPlatform" style="opacity:0.8;">Platform</span>
+            </div>
+
+            <div class="modal-profile-img" id="modalProfile">
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-row">
+                    <span class="modal-label">Number</span>
+                    <span class="modal-val" id="modalNum" onclick="copyText(this.innerText)">-</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">NRC</span>
+                    <span class="modal-val" id="modalNrc" onclick="copyText(this.innerText)">-</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">PIN</span>
+                    <span class="modal-val" id="modalPin" onclick="copyText(this.innerText)">-</span>
+                </div>
+                <div class="modal-row" style="border:none;">
+                    <span class="modal-label">Auto No.</span>
+                    <span class="modal-val" id="modalAuto" onclick="copyText(this.innerText)">-</span>
+                </div>
+                
+                <p style="text-align:center; font-size:0.8rem; color:var(--text-light); margin-top:5px;">(Tap values to copy)</p>
+
+                <div class="btn-group">
+                    <button class="btn-save" style="background:var(--text-light); padding:12px; margin:0;" onclick="closeModal()">Close</button>
+                    <button class="btn-save" style="padding:12px; margin:0;" onclick="editAccount()">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIG & STATE ---
+        let hapticEnabled = localStorage.getItem('haptic') === 'true'; // Default false if not set
+        if(localStorage.getItem('haptic') === null) {
+             hapticEnabled = true; // Default ON
+             localStorage.setItem('haptic', 'true');
+        }
+
+        function triggerHaptic(pattern = 30) {
+            if(hapticEnabled && navigator.vibrate) navigator.vibrate(pattern);
+        }
+
+        // --- 1. LOGIN SYSTEM ---
+        const VALID_USERS = { "Ei Ko Zin": "78521896", "Raycod": "78521896", "Htoo San": "78521896" };
+
+        function handleLogin() {
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+
+            if (VALID_USERS[u] && VALID_USERS[u] === p) {
+                document.getElementById('loginPage').style.display = 'none';
+                showToast(`Welcome, ${u}!`, 'success');
+                const loader = document.getElementById('loadingScreen');
+                loader.style.display = 'flex';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    navTo('dashboardPage');
+                }, 4000);
+            } else {
+                showToast("Invalid Credentials!", 'error');
+                triggerHaptic([50, 50, 50]);
+            }
+        }
+
+        function toggleLoginPass() {
+            const p = document.getElementById('loginPass');
+            p.type = p.type === 'password' ? 'text' : 'password';
+        }
+
+        // --- 2. DATA HANDLING ---
+        let db = JSON.parse(localStorage.getItem('atomx_db') || '[]');
+        let currentItem = null;
+
+        function updateStats() {
+            document.getElementById('totalCount').innerText = db.length;
+            const today = new Date().toDateString();
+            document.getElementById('todayCount').innerText = db.filter(i => new Date(i.id).toDateString() === today).length;
+        }
+
+        function saveData() {
+            const id = document.getElementById('editId').value;
+            const bankNum = document.getElementById('bankNum').value;
+
+            // Duplicate Check (Check if number exists and it's not the current item being edited)
+            const exists = db.some(item => item.bankNum === bankNum && item.id != id);
+            if(exists) {
+                showToast("Account Number already exists!", 'error');
+                triggerHaptic([50, 100]);
+                return;
+            }
+
+            const data = {
+                id: id ? Number(id) : Date.now(),
+                name: document.getElementById('name').value,
+                bankNum: bankNum,
+                nrc: document.getElementById('nrc').value,
+                pin: document.getElementById('pin').value,
+                autoNo: document.getElementById('autoNo').value,
+                platform: document.getElementById('platform').value
+            };
+
+            if(!data.name || !data.bankNum || !data.platform) { 
+                showToast("Fill Name, Number & Platform!", 'error'); 
+                triggerHaptic(100);
+                return; 
+            }
+
+            if(id) {
+                const idx = db.findIndex(x => x.id == id);
+                if(idx > -1) db[idx] = data;
+                showToast("Account Updated", 'success');
+            } else {
+                db.push(data);
+                showToast("Account Created", 'success');
+            }
+
+            localStorage.setItem('atomx_db', JSON.stringify(db));
+            resetForm();
+            updateStats();
+            triggerHaptic(50);
+        }
+
+        function renderList() {
+            const grid = document.getElementById('gridContainer');
+            grid.innerHTML = '';
+            const q = document.getElementById('searchBox').value.toLowerCase();
+            
+            db.filter(i => i.name.toLowerCase().includes(q) || i.bankNum.includes(q)).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.onclick = () => openModal(item);
+                div.innerHTML = `
+                    <div class="user-icon"><i class="fas fa-user"></i></div>
+                    <div class="card-info">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-sub">${item.platform}</div>
+                        <div class="card-sub">${item.bankNum}</div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // --- 3. MODAL & DYNAMIC COLORS ---
+        function getBankClass(platform) {
+            if(!platform) return 'bg-other';
+            if(platform.includes('KBZ')) return 'bg-kpay';
+            if(platform.includes('Wave')) return 'bg-wave';
+            if(platform.includes('CB')) return 'bg-cb';
+            if(platform.includes('UAB')) return 'bg-uab';
+            if(platform.includes('Yoma')) return 'bg-yoma';
+            return 'bg-other';
+        }
+
+        function openModal(item) {
+            currentItem = item;
+            document.getElementById('modalName').innerText = item.name;
+            document.getElementById('modalPlatform').innerText = item.platform || 'Unknown';
+            document.getElementById('modalNum').innerText = item.bankNum;
+            document.getElementById('modalNrc').innerText = item.nrc || '-';
+            document.getElementById('modalPin').innerText = item.pin || '-';
+            document.getElementById('modalAuto').innerText = item.autoNo || '-';
+            
+            // Dynamic Colors
+            const colorClass = getBankClass(item.platform);
+            const headerBg = document.getElementById('modalHeaderBg');
+            const profileIcon = document.getElementById('modalProfile');
+            
+            headerBg.className = 'modal-header ' + colorClass;
+            profileIcon.style.color = 'var(--text-main)';
+            if(colorClass === 'bg-kpay') profileIcon.style.color = '#0056b3';
+            if(colorClass === 'bg-wave') profileIcon.style.color = '#fbbf24';
+            if(colorClass === 'bg-uab') profileIcon.style.color = '#000';
+            if(colorClass === 'bg-yoma') profileIcon.style.color = '#dc2626';
+            if(colorClass === 'bg-cb') profileIcon.style.color = '#000080';
+
+            document.getElementById('detailModal').classList.add('active');
+            triggerHaptic(20);
+        }
+
+        function closeModal() { document.getElementById('detailModal').classList.remove('active'); }
+
+        function copyText(txt) {
+            if(txt === '-') return;
+            navigator.clipboard.writeText(txt);
+            showToast("Copied!", 'success');
+            triggerHaptic(40);
+        }
+
+        function editAccount() {
+            closeModal();
+            document.getElementById('editId').value = currentItem.id;
+            document.getElementById('name').value = currentItem.name;
+            document.getElementById('bankNum').value = currentItem.bankNum;
+            document.getElementById('nrc').value = currentItem.nrc;
+            document.getElementById('pin').value = currentItem.pin;
+            document.getElementById('autoNo').value = currentItem.autoNo;
+            document.getElementById('platform').value = currentItem.platform;
+
+            document.getElementById('formTitle').innerText = "Edit Account";
+            document.getElementById('saveBtn').innerText = "Update Account";
+            document.getElementById('cancelBtn').style.display = 'block';
+
+            document.querySelectorAll('.chip').forEach(c => {
+                c.classList.remove('active');
+                if(c.innerText === currentItem.platform) c.classList.add('active');
+            });
+
+            navTo('createPage');
+        }
+
+        // --- 4. BACKUP & EXPORT ---
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const dlNode = document.createElement('a');
+            dlNode.setAttribute("href", dataStr);
+            dlNode.setAttribute("download", "atomx_backup.json");
+            document.body.appendChild(dlNode);
+            dlNode.click();
+            dlNode.remove();
+            showToast("Backup Downloaded!", 'success');
+            triggerHaptic(30);
+        }
+
+        function exportExcel() {
+            let csvContent = "data:text/csv;charset=utf-8,Name,Platform,Number,NRC,PIN,AutoNo\n";
+            db.forEach(row => {
+                let rowStr = `${row.name},${row.platform},${row.bankNum},${row.nrc},${row.pin},${row.autoNo}`;
+                csvContent += rowStr + "\n";
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "atomx_accounts.csv");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            showToast("CSV Downloaded!", 'success');
+            triggerHaptic(30);
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    db = JSON.parse(e.target.result);
+                    localStorage.setItem('atomx_db', JSON.stringify(db));
+                    updateStats(); renderList();
+                    showToast("Data Restored!", 'success');
+                    triggerHaptic([30, 30]);
+                } catch(err) { showToast("Invalid File!", 'error'); }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- 5. HAPTIC & UI UTILS ---
+        function toggleHaptic() {
+            hapticEnabled = !hapticEnabled;
+            localStorage.setItem('haptic', hapticEnabled);
+            updateHapticUI();
+            if(hapticEnabled) triggerHaptic(50);
+        }
+        function updateHapticUI() {
+            const sw = document.getElementById('hapticSwitch');
+            if(hapticEnabled) sw.classList.add('toggle-active');
+            else sw.classList.remove('toggle-active');
+        }
+        updateHapticUI(); // Init
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msgSpan = document.getElementById('toastMsg');
+            
+            t.className = 'toast'; 
+            if(type === 'error') {
+                t.classList.add('error');
+                icon.className = 'fas fa-times-circle';
+                icon.style.color = 'var(--danger)';
+            } else {
+                t.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+                icon.style.color = 'var(--success)';
+            }
+            
+            msgSpan.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function toggleFormPin() {
+            const p = document.getElementById('pin');
+            p.type = p.type === 'password' ? 'text' : 'password';
+        }
+
+        function resetForm() {
+            document.getElementById('editId').value = '';
+            ['name','bankNum','nrc','pin','autoNo','platform'].forEach(id => document.getElementById(id).value = '');
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            document.getElementById('formTitle').innerText = "Create Account";
+            document.getElementById('saveBtn').innerText = "Create Account";
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        function setPlatform(el, val) {
+            document.getElementById('platform').value = val;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            triggerHaptic(10);
+        }
+
+        function navTo(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(btn) {
+                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            if(pageId === 'listPage') renderList();
+            
+            // Close sidebar
+            const sb = document.getElementById('sidebar');
+            if(sb.classList.contains('active')) toggleSidebar();
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            sb.classList.toggle('active');
+            ov.classList.toggle('active');
+            triggerHaptic(15);
+        }
+
+        function toggleTheme() {
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? '' : 'dark');
+            showToast("Theme Changed", 'success');
+            triggerHaptic(20);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('date').innerText = now.toLocaleDateString([], {weekday:'short', day:'numeric', month:'short'});
+        }
+        setInterval(updateClock, 1000); updateClock(); updateStats();
+
+        function logout() { if(confirm("Log Out?")) location.reload(); }
+    </script>
+</body>
+</html>
