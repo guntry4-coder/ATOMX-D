@@ -6,12 +6,6 @@
     <title>PCA Store Manager</title>
     <meta name="theme-color" content="#1877f2">
     
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         /* ================= Theme Variables (Facebook Light) ================= */
         :root {
@@ -129,7 +123,6 @@
         .card-profit-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 12px; border-radius: 8px;}
         .profit-label { font-size: 12px; font-weight: 700; color: var(--text-sec);}
         .card-profit-badge { font-size: 15px; font-weight: 800; color: var(--success); }
-        .card-profit-badge.negative { color: var(--danger); }
         
         .btn-sell { background: rgba(49, 162, 76, 0.15); color: var(--success); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; transition: transform 0.1s;}
         .btn-sell:active { transform: scale(0.9); background: var(--success); color: white; }
@@ -225,7 +218,7 @@
         </div>
     </div>
 
-    <header class="app-header">
+  <header class="app-header">
         <div class="header-left">
             <button class="menu-btn" onclick="window.toggleSidebar()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -246,7 +239,7 @@
                 <li class="nav-item active" id="nav-inventory" onclick="window.switchView('inventory')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg><span>Game Grid (Profit)</span></li>
                 <li class="nav-item" id="nav-sales" onclick="window.switchView('sales')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span>Daily Sales Tracker</span></li>
                 <li class="nav-item" id="nav-vouchers" onclick="window.switchView('vouchers')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span>Voucher & Coupon</span></li>
-                <li class="nav-item" id="nav-settings" onclick="window.switchView('settings')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings & Theme</span></li>
+                <li class="nav-item" id="nav-settings" onclick="window.switchView('settings')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0 2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings & Theme</span></li>
             </ul>
             <div class="sidebar-title">Games Category</div>
             <ul class="game-list" id="sidebarGameList"></ul>
@@ -451,10 +444,10 @@
     </main>
 
     <script>
-        // 1. Force data load first (Fallback) so UI is ready immediately
-        window.addEventListener('DOMContentLoaded', function() {
-            loadLocalDataFallback(); 
-        });
+        // Define SVGs for modern injection safely
+        const svgTrash = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+        const svgCart = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`;
+        const defaultImg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23eee'%3E%3Crect width='24' height='24' rx='4'/%3E%3C/svg%3E`;
 
         // Firebase Configuration Details
         const firebaseConfig = {
@@ -465,13 +458,15 @@
         };
         
         let app, auth, db, storage, googleProvider;
+
+        // Try initializing Firebase
         try {
             app = firebase.initializeApp(firebaseConfig);
             auth = firebase.auth();
             db = firebase.firestore();
             storage = firebase.storage();
             googleProvider = new firebase.auth.GoogleAuthProvider();
-            try { db.enablePersistence().catch(function(err){}); } catch(e){}
+            try { db.enablePersistence().catch(e => console.warn(e)); } catch(e){}
         } catch(e) { console.log("Firebase Load Fallback Active."); }
 
         // Application Global States
@@ -483,40 +478,46 @@
         let editingIdx = -1;
         let uploadedImageUrl = ""; 
 
-        const svgTrash = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
-        const svgCart = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`;
+        // Initial Load Fallback (Instant UI)
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalDataFallback(); 
+            document.getElementById('v-out-date').innerText = new Date().toLocaleDateString();
+        });
 
         // ================= AUTH OBSERVER LOGIC =================
         if(auth) {
-            auth.onAuthStateChanged(function(user) {
+            auth.onAuthStateChanged((user) => {
                 if (user) { 
                     currentUserUid = user.uid; 
                     document.getElementById('authScreen').style.display = 'none'; 
                     loadCloudData();
                 } else { 
                     currentUserUid = null; 
-                    document.getElementById('authScreen').style.display = 'flex'; 
+                    let hasLocal = localStorage.getItem('pcaStoreData');
+                    // Show login screen if completely clean, else keep working local
+                    if(!hasLocal) document.getElementById('authScreen').style.display = 'flex'; 
                     loadLocalDataFallback(); 
                 }
             });
         } else {
-            document.getElementById('authScreen').style.display = 'flex';
+            let hasLocal = localStorage.getItem('pcaStoreData');
+            if(!hasLocal) document.getElementById('authScreen').style.display = 'flex';
         }
 
         // ================= GOOGLE AUTHENTICATION =================
-        window.loginWithGoogle = function() {
-            if(!auth) return window.showToast("Firebase init configuration error", "error");
-            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
+        window.loginWithGoogle = () => {
+            if(!auth) return window.showToast("Firebase connection unavailable", "error");
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
                 return auth.signInWithPopup(googleProvider);
-            }).then(function(result) {
+            }).then((result) => {
                 currentUserUid = result.user.uid;
-                window.showToast("Welcome Back!");
-            }).catch(function(e) {
-                window.showToast("Authentication interrupted", "error");
+                window.showToast("Welcome Back!", "success");
+            }).catch((e) => {
+                window.showToast("Login closed or failed", "error");
             });
         };
 
-        window.handleLogout = function() { 
+        window.handleLogout = () => { 
             if(confirm("Are you sure you want to sign out?")) {
                 if(auth) auth.signOut();
                 localStorage.removeItem('pcaStoreData');
@@ -528,34 +529,36 @@
 
         // ================= DATA RECOVERY & STORAGE LOGIC =================
         function loadLocalDataFallback() {
-            var json = localStorage.getItem('pcaStoreData');
+            const json = localStorage.getItem('pcaStoreData');
             storeData = json ? JSON.parse(json) : {}; 
-            var profileJson = localStorage.getItem('pcaStoreProfile');
+            
+            const profileJson = localStorage.getItem('pcaStoreProfile');
             if(profileJson) storeProfile = JSON.parse(profileJson);
-            var salesJson = localStorage.getItem('pcaSalesData');
+            
+            const salesJson = localStorage.getItem('pcaSalesData');
             if(salesJson) salesData = JSON.parse(salesJson);
 
-            var games = Object.keys(storeData);
+            const games = Object.keys(storeData);
             if(games.length > 0) {
                 activeGame = games[0];
-                games.forEach(function(g) { if(!storeData[g].items) storeData[g] = { image: "", items: [] }; });
+                games.forEach(g => { if(!storeData[g].items) storeData[g] = { image: "", items: [] }; });
             } else { activeGame = ""; }
             updateUI();
         }
 
         function loadCloudData() {
-            db.collection("stores").doc(currentUserUid).get().then(function(snap) {
+            db.collection("stores").doc(currentUserUid).get().then((snap) => {
                 if(snap.exists) {
-                    var d = snap.data();
+                    const d = snap.data();
                     if(d.inventory) storeData = d.inventory;
                     if(d.profile) storeProfile = d.profile;
                     if(d.salesHistory) salesData = d.salesHistory;
-                    var games = Object.keys(storeData);
+                    const games = Object.keys(storeData);
                     if(games.length > 0) activeGame = games[0];
                     saveLocalData(); 
                 }
                 updateUI();
-            }).catch(function(e) { loadLocalDataFallback(); });
+            }).catch((e) => { loadLocalDataFallback(); });
         }
 
         function saveLocalData() { 
@@ -567,7 +570,7 @@
         function saveData() {
             saveLocalData();
             if(auth && currentUserUid) {
-                db.collection("stores").doc(currentUserUid).set({ inventory: storeData, profile: storeProfile, salesHistory: salesData }, {merge: true}).catch(function(e){});
+                db.collection("stores").doc(currentUserUid).set({ inventory: storeData, profile: storeProfile, salesHistory: salesData }, {merge: true}).catch(e=>{});
             }
         }
 
@@ -584,18 +587,18 @@
         }
 
         // ================= SIDEBAR ANIMATION INTERACTION =================
-        window.toggleSidebar = function() { 
-            var sidebar = document.getElementById('sidebar');
-            var overlay = document.getElementById('overlay');
+        window.toggleSidebar = () => { 
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
             sidebar.classList.toggle('open');
             overlay.classList.toggle('show');
         };
         
-        window.switchView = function(v) {
-            document.querySelectorAll('.view-container').forEach(function(el) { el.classList.remove('active'); }); 
-            document.getElementById('view-' + v).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); }); 
-            if(document.getElementById('nav-' + v)) document.getElementById('nav-' + v).classList.add('active');
+        window.switchView = (v) => {
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active')); 
+            document.getElementById(`view-${v}`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); 
+            if(document.getElementById(`nav-${v}`)) document.getElementById(`nav-${v}`).classList.add('active');
             
             document.getElementById('sidebar').classList.remove('open'); 
             document.getElementById('overlay').classList.remove('show');
@@ -604,36 +607,36 @@
         };
 
         // ================= BUCKET MEDIA UPLOAD =================
-        window.handleModalImage = function(inputEl) {
-            var file = inputEl.files[0];
-            var preview = document.getElementById('m-new-game-preview');
-            var statusTxt = document.getElementById('upload-status');
+        window.handleModalImage = (inputEl) => {
+            const file = inputEl.files[0];
+            const preview = document.getElementById('m-new-game-preview');
+            const statusTxt = document.getElementById('upload-status');
             
             if(file) {
                 preview.style.display = 'block';
                 if(storage && currentUserUid) {
                     statusTxt.style.display = 'block'; statusTxt.innerText = "Uploading Icon...";
-                    var storageRef = storage.ref("game_icons/" + currentUserUid + "_" + Date.now() + "_" + file.name);
-                    storageRef.put(file).then(function(snapshot) {
+                    const storageRef = storage.ref(`game_icons/${currentUserUid}_${Date.now()}_${file.name}`);
+                    storageRef.put(file).then((snapshot) => {
                         return snapshot.ref.getDownloadURL();
-                    }).then(function(url) {
+                    }).then((url) => {
                         uploadedImageUrl = url;
                         preview.src = uploadedImageUrl;
                         statusTxt.innerText = "Upload Complete!";
                         statusTxt.style.color = "var(--success)";
-                    }).catch(function() {
+                    }).catch(() => {
                         statusTxt.innerText = "Error Uploading";
                         statusTxt.style.color = "var(--danger)";
                     });
                 } else {
-                    var reader = new FileReader();
-                    reader.onload = function(e) { uploadedImageUrl = e.target.result; preview.src = uploadedImageUrl; };
+                    const reader = new FileReader();
+                    reader.onload = (e) => { uploadedImageUrl = e.target.result; preview.src = uploadedImageUrl; };
                     reader.readAsDataURL(file);
                 }
             }
         };
 
-        window.openAddGameModal = function() { 
+        window.openAddGameModal = () => { 
             document.getElementById('m-new-game-name').value = ''; 
             document.getElementById('m-new-game-image').value = ''; 
             document.getElementById('m-new-game-preview').style.display = 'none'; 
@@ -642,89 +645,129 @@
             document.getElementById('addGameModal').classList.add('show'); 
         };
         
-        window.closeModalById = function(id) { document.getElementById(id).classList.remove('show'); };
+        window.closeModalById = (id) => { document.getElementById(id).classList.remove('show'); };
         
-        window.confirmAddGame = function() { 
-            var name = document.getElementById('m-new-game-name').value.trim(); 
+        window.confirmAddGame = () => { 
+            const name = document.getElementById('m-new-game-name').value.trim(); 
             if(!name) return window.showToast("Please enter game name", "error");
-            if(storeData[name]) return window.showToast("Game structure duplicated", "error"); 
+            if(storeData[name]) return window.showToast("Game already exists", "error"); 
             
             storeData[name] = { image: uploadedImageUrl, items: [] }; 
             activeGame = name;
             saveData(); window.showToast("Game Added Successfully!", "success"); window.closeModalById('addGameModal'); updateUI();
         };
 
-        window.renderSidebar = function() {
-            var list = document.getElementById('sidebarGameList'); list.innerHTML = '';
-            Object.keys(storeData).forEach(function(gName) {
-                var gData = storeData[gName];
-                var li = document.createElement('li'); li.className = 'game-item ' + (gName === activeGame ? 'active' : '');
-                li.innerHTML = '<div class="game-info" onclick="window.selectSidebarGame(\\'' + gName + '\\')"><div class="game-thumb-container"><img src="' + (gData.image || 'data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' stroke=\\'%23666\\' stroke-width=\\'2\\'><rect width=\\'100%\\' height=\\'100%\\'/></svg>') + '" class="sidebar-game-thumb"><span class="game-name">' + gName + '</span></div></div><button class="btn-del-game" onclick="window.deleteGame(\\'' + gName + '\\', event)">' + svgTrash + '</button>';
+        window.renderSidebar = () => {
+            const list = document.getElementById('sidebarGameList'); list.innerHTML = '';
+            Object.keys(storeData).forEach((gName) => {
+                const gData = storeData[gName];
+                const li = document.createElement('li'); li.className = `game-item ${gName === activeGame ? 'active' : ''}`;
+                const img = gData.image || defaultImg;
+                li.innerHTML = `
+                    <div class="game-info" onclick="window.selectSidebarGame('${gName}')">
+                        <div class="game-thumb-container">
+                            <img src="${img}" class="sidebar-game-thumb">
+                            <span class="game-name">${gName}</span>
+                        </div>
+                    </div>
+                    <button class="btn-del-game" onclick="window.deleteGame('${gName}', event)">${svgTrash}</button>
+                `;
                 list.appendChild(li);
             });
         };
-        window.selectSidebarGame = function(name) { activeGame = name; window.renderSidebar(); window.renderTable(); window.toggleSidebar(); };
-        window.deleteGame = function(n, e) { e.stopPropagation(); if(confirm("Delete Game?")){ delete storeData[n]; activeGame = Object.keys(storeData)[0] || ""; saveData(); updateUI(); }};
+        
+        window.selectSidebarGame = (name) => { activeGame = name; window.renderSidebar(); window.renderTable(); window.toggleSidebar(); };
+        window.deleteGame = (n, e) => { e.stopPropagation(); if(confirm("Delete Game?")){ delete storeData[n]; activeGame = Object.keys(storeData)[0] || ""; saveData(); updateUI(); }};
 
         // ================= GRID GRAPH RENDER =================
-        window.renderTable = function() {
-            var gNameText = activeGame || "Select Game";
-            var gData = storeData[activeGame]; 
-            var listCon = document.getElementById('itemListContainer'); listCon.innerHTML = '';
+        window.renderTable = () => {
+            const gNameText = activeGame || "Select Game";
+            const gData = storeData[activeGame]; 
+            const listCon = document.getElementById('itemListContainer'); listCon.innerHTML = '';
             
             if(!activeGame || !gData) { document.getElementById('currentGameTitle').innerText = gNameText; return; }
             document.getElementById('currentGameTitle').innerText = gNameText;
 
-            var tc=0, tr=0;
-            gData.items.forEach(function(itm, idx) {
-                var cost = parseFloat(itm.cost) || 0; var sell = parseFloat(itm.sell) || 0; var profit = sell - cost; 
+            let tc=0, tr=0;
+            gData.items.forEach((itm, idx) => {
+                let cost = parseFloat(itm.cost) || 0; 
+                let sell = parseFloat(itm.sell) || 0; 
+                let profit = sell - cost; 
                 tc += cost; tr += sell;
                 
-                var pColor = profit < 0 ? 'var(--danger)' : 'var(--success)';
-                var pBg = profit < 0 ? 'rgba(228, 30, 63, 0.1)' : 'rgba(49, 162, 76, 0.1)';
-                var pBorder = profit < 0 ? '#fca5a5' : '#d1fae5';
-                var pSign = profit <= 0 ? '' : '+';
+                let pColor = profit < 0 ? 'var(--danger)' : 'var(--success)';
+                let pBg = profit < 0 ? 'rgba(228, 30, 63, 0.1)' : 'rgba(49, 162, 76, 0.1)';
+                let pBorder = profit < 0 ? '#fca5a5' : '#d1fae5';
+                let pSign = profit <= 0 ? '' : '+';
+                let img = gData.image || defaultImg;
 
-                var card = document.createElement('div'); card.className = 'item-card';
-                card.innerHTML = '<div class="card-top-row"><div class="card-left-group" onclick="window.openItemModal(' + idx + ')"><span class="serial-no">' + (idx + 1) + '</span><img src="' + (gData.image || 'data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\'></svg>') + '" class="item-card-thumb"><span class="item-card-name">' + itm.name + '</span></div><button class="btn-sell" onclick="window.recordSale(' + idx + ', event)">' + svgCart + ' Sell</button></div><div class="card-price-details" onclick="window.openItemModal(' + idx + ')">Cost <span class="card-cost-span">' + cost + 'KS</span>Sell <span class="card-sell-span">' + sell + 'KS</span></div><div class="card-profit-row" onclick="window.openItemModal(' + idx + ')"><span class="profit-label">Net Profit (KS)</span><span class="card-profit-badge" style="color:' + pColor + '; background:' + pBg + '; border:1px solid ' + pBorder + '; padding:4px 10px; border-radius:8px;">' + pSign + profit + '</span></div>';
+                const card = document.createElement('div'); card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="card-top-row">
+                        <div class="card-left-group" onclick="window.openItemModal(${idx})">
+                            <span class="serial-no">${idx + 1}</span>
+                            <img src="${img}" class="item-card-thumb">
+                            <span class="item-card-name">${itm.name}</span>
+                        </div>
+                        <button class="btn-sell" onclick="window.recordSale(${idx}, event)">${svgCart} Sell</button>
+                    </div>
+                    <div class="card-price-details" onclick="window.openItemModal(${idx})">
+                        Cost <span class="card-cost-span">${cost}KS</span>
+                        Sell <span class="card-sell-span">${sell}KS</span>
+                    </div>
+                    <div class="card-profit-row" onclick="window.openItemModal(${idx})">
+                        <span class="profit-label">Net Profit (KS)</span>
+                        <span class="card-profit-badge" style="color:${pColor}; background:${pBg}; border:1px solid ${pBorder}; padding:4px 10px; border-radius:8px;">${pSign}${profit}</span>
+                    </div>
+                `;
                 listCon.appendChild(card);
             });
             document.getElementById('totalCostVal').innerText = tc; document.getElementById('totalRevenueVal').innerText = tr; document.getElementById('totalProfitVal').innerText = tr-tc;
             document.getElementById('totalProfitVal').style.color = (tr-tc) < 0 ? 'var(--danger)' : 'var(--primary)';
         };
 
-        window.openItemModal = function(idx) {
-            idx = idx !== undefined ? idx : -1; editingIdx = idx; 
+        window.openItemModal = (idx = -1) => {
+            editingIdx = idx; 
             document.getElementById('itemModal').classList.add('show');
             if(idx > -1) {
-                var i = storeData[activeGame].items[idx]; document.getElementById('modalTitle').innerText="Edit Item"; document.getElementById('m-name').value=i.name; document.getElementById('m-cost').value=i.cost; document.getElementById('m-sell').value=i.sell; document.getElementById('btn-modal-del').style.display='block';
+                const i = storeData[activeGame].items[idx]; 
+                document.getElementById('modalTitle').innerText="Edit Item"; 
+                document.getElementById('m-name').value=i.name; 
+                document.getElementById('m-cost').value=i.cost; 
+                document.getElementById('m-sell').value=i.sell; 
+                document.getElementById('btn-modal-del').style.display='block';
             } else {
                 if(!activeGame) { window.showToast("Add a game first", "error"); window.closeModalById('itemModal'); return; }
-                document.getElementById('modalTitle').innerText="Add Item"; document.getElementById('m-name').value=''; document.getElementById('m-cost').value=''; document.getElementById('m-sell').value=''; document.getElementById('btn-modal-del').style.display='none';
+                document.getElementById('modalTitle').innerText="Add Item"; 
+                document.getElementById('m-name').value=''; 
+                document.getElementById('m-cost').value=''; 
+                document.getElementById('m-sell').value=''; 
+                document.getElementById('btn-modal-del').style.display='none';
             }
         };
-        window.itemSave = function() {
-            var ni = { name: document.getElementById('m-name').value, cost: parseFloat(document.getElementById('m-cost').value)||0, sell: parseFloat(document.getElementById('m-sell').value)||0 };
+        
+        window.itemSave = () => {
+            const ni = { name: document.getElementById('m-name').value, cost: parseFloat(document.getElementById('m-cost').value)||0, sell: parseFloat(document.getElementById('m-sell').value)||0 };
             if(editingIdx > -1) storeData[activeGame].items[editingIdx] = ni; else storeData[activeGame].items.push(ni);
             saveData(); window.renderTable(); window.closeModalById('itemModal');
         };
-        window.itemDelete = function() { if(confirm("Delete?")) { storeData[activeGame].items.splice(editingIdx, 1); saveData(); window.renderTable(); window.closeModalById('itemModal'); } };
+        
+        window.itemDelete = () => { if(confirm("Delete this item?")) { storeData[activeGame].items.splice(editingIdx, 1); saveData(); window.renderTable(); window.closeModalById('itemModal'); } };
 
-        // ================= SALES TRACKER =================
-        window.recordSale = function(idx, e) {
+        // ================= DAILY SALES TRACKER =================
+        window.recordSale = (idx, e) => {
             e.stopPropagation();
             const itm = storeData[activeGame].items[idx];
             const dateStr = new Date().toLocaleDateString();
-            
             salesData.push({
                 date: dateStr, game: activeGame, name: itm.name, profit: (itm.sell || 0) - (itm.cost || 0), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             });
             saveData(); window.showToast(`Sold 1x ${itm.name}`); window.renderSales();
         };
 
-        window.renderSales = function() {
+        window.renderSales = () => {
             const todayStr = new Date().toLocaleDateString();
-            var titleEl = document.getElementById('salesDateTitle');
+            const titleEl = document.getElementById('salesDateTitle');
             if(titleEl) titleEl.innerText = todayStr;
             
             let todayItems = salesData.filter(s => s.date === todayStr);
@@ -750,7 +793,7 @@
             document.getElementById('salesTotalProfit').style.color = todayProfit < 0 ? 'var(--danger)' : 'var(--success)';
         };
 
-        window.clearDailySales = function() {
+        window.clearDailySales = () => {
             if(confirm("Clear today's sales history?")) {
                 const todayStr = new Date().toLocaleDateString();
                 salesData = salesData.filter(s => s.date !== todayStr);
@@ -758,7 +801,8 @@
             }
         };
 
-        window.sendTelegramReport = async function() {
+        // TELEGRAM REPORT ACTION
+        window.sendTelegramReport = async () => {
             const token = storeProfile.tgToken; const chatId = storeProfile.tgChatId;
             if(!token || !chatId) { window.switchView('settings'); return window.showToast("Please setup Telegram Bot Settings first", "error"); }
             const todayStr = new Date().toLocaleDateString();
@@ -777,37 +821,41 @@
         };
 
         // ================= PRINT RECEIPT ACTIONS =================
-        window.switchVCTab = function(tab) {
+        window.switchVCTab = (tab) => {
             document.getElementById('tab-btn-voucher').classList.remove('active'); document.getElementById('tab-btn-coupon').classList.remove('active');
             document.getElementById('vc-section-voucher').style.display = 'none'; document.getElementById('vc-section-coupon').style.display = 'none';
-            document.getElementById('tab-btn-' + tab).classList.add('active'); document.getElementById('vc-section-' + tab).style.display = 'block';
+            document.getElementById(`tab-btn-${tab}`).classList.add('active'); document.getElementById(`vc-section-${tab}`).style.display = 'block';
         };
-        window.updateVoucherPreview = function() {
+        window.updateVoucherPreview = () => {
             document.getElementById('v-out-name').innerText = document.getElementById('v-name').value || "-";
             document.getElementById('v-out-game').innerText = document.getElementById('v-game').value || "-";
             document.getElementById('v-out-item').innerText = document.getElementById('v-item').value || "-";
             document.getElementById('v-out-price').innerText = (document.getElementById('v-price').value || "0") + " KS";
         };
-        window.updateCouponPreview = function() {
+        window.updateCouponPreview = () => {
             document.getElementById('c-out-discount').innerText = document.getElementById('c-discount').value || "GIFT VOUCHER";
             document.getElementById('c-out-code').innerText = document.getElementById('c-code').value.toUpperCase() || "XXXX-XXXX";
             document.getElementById('c-out-expiry').innerText = document.getElementById('c-expiry').value || "-";
         };
-        window.downloadCard = function(elementId, filename) {
-            var elm = document.getElementById(elementId); var originalShadow = elm.style.boxShadow; elm.style.boxShadow = 'none'; window.showToast("Generating image...");
-            html2canvas(elm, { scale: 3, backgroundColor: null }).then(function(canvas) {
-                var link = document.createElement('a'); link.download = storeProfile.name + "_" + filename + "_" + Date.now() + ".png"; link.href = canvas.toDataURL('image/png'); link.click();
+        window.downloadCard = (elementId, filename) => {
+            const elm = document.getElementById(elementId); 
+            const originalShadow = elm.style.boxShadow; elm.style.boxShadow = 'none'; 
+            window.showToast("Generating image...");
+            html2canvas(elm, { scale: 3, backgroundColor: null }).then((canvas) => {
+                const link = document.createElement('a'); link.download = `${storeProfile.name}_${filename}_${Date.now()}.png`; link.href = canvas.toDataURL('image/png'); link.click();
                 elm.style.boxShadow = originalShadow; window.showToast("Image Downloaded!", "success");
-            }).catch(function() { elm.style.boxShadow = originalShadow; window.showToast("Failed to generate image", "error"); });
+            }).catch(() => { elm.style.boxShadow = originalShadow; window.showToast("Failed to generate image", "error"); });
         };
 
-        window.toggleTheme = function() {
+        // ================= SETTINGS =================
+        window.toggleTheme = () => {
             const isDark = document.getElementById('themeToggle').checked;
             if(isDark) { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); } 
             else { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('theme', 'light'); }
             window.renderTable(); 
         };
-        window.saveStoreSettings = function() { 
+        
+        window.saveStoreSettings = () => { 
             storeProfile.name = document.getElementById('settingStoreName').value || "PCA Store"; 
             storeProfile.tgToken = document.getElementById('tgToken').value.trim();
             storeProfile.tgChatId = document.getElementById('tgChatId').value.trim();
