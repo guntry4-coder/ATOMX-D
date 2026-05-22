@@ -67,14 +67,227 @@
         .input-field { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 15px; font-weight: 600;}
         .card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border);}
 
-        /* ================= AUTO SEARCH BAR (SOLID & LIQUID) ================= */
-        .search-box { position: relative; margin-bottom: 20px; width: 100%;}
-        .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sec); transition: 0.3s ease; pointer-events: none;}
-        .search-box input { width: 100%; padding: 16px 16px 16px 48px; border-radius: 14px; border: 2px solid transparent; background: var(--card); color: var(--text); font-size: 15px; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow); }
-        /* Liquid Focus Effect */
-        .search-box input:focus { border-color: var(--primary); background: var(--card); box-shadow: 0 0 0 4px rgba(24,119,242,0.15), var(--shadow); outline: none;}
-        [data-theme="dark"] .search-box input:focus { box-shadow: 0 0 0 4px rgba(255,140,0,0.15), var(--shadow); }
-        .search-box input:focus + svg { color: var(--primary); }
+        /* ================= SEARCH BAR — SOLID LIQUID STYLE ================= */
+        .search-box { position: relative; margin-bottom: 20px; width: 100%; }
+        .search-box .search-icon {
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 52px; display: flex; align-items: center; justify-content: center;
+            color: white; z-index: 3; pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .search-box {
+            display: flex; align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #0d47a1 100%);
+            border-radius: 50px;
+            padding: 3px;
+            box-shadow: 0 6px 20px rgba(24,119,242,0.35), 0 2px 8px rgba(24,119,242,0.2);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        [data-theme="dark"] .search-box {
+            background: linear-gradient(135deg, #ff8c00 0%, #e65c00 100%);
+            box-shadow: 0 6px 20px rgba(255,140,0,0.35), 0 2px 8px rgba(255,140,0,0.2);
+        }
+        .search-box:focus-within {
+            box-shadow: 0 8px 28px rgba(24,119,242,0.5), 0 0 0 3px rgba(24,119,242,0.2);
+            transform: translateY(-1px);
+        }
+        [data-theme="dark"] .search-box:focus-within {
+            box-shadow: 0 8px 28px rgba(255,140,0,0.5), 0 0 0 3px rgba(255,140,0,0.2);
+        }
+        .search-box input {
+            flex: 1;
+            padding: 13px 18px 13px 52px;
+            border-radius: 46px;
+            border: none;
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px; font-weight: 700;
+            outline: none;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .search-box input::placeholder { color: var(--text-sec); font-weight: 600; }
+        .search-box input:focus ~ .search-icon { transform: scale(1.15); }
+
+        /* ================= VOUCHER & COUPON — REDESIGNED ================= */
+        /* Tabs */
+        .vc-tabs { display: flex; gap: 0; margin-bottom: 24px; background: var(--bg); border-radius: 16px; padding: 5px; border: 1px solid var(--border); }
+        .vc-tab {
+            flex: 1; padding: 12px; text-align: center; font-weight: 800; font-size: 13px;
+            border-radius: 12px; color: var(--text-sec); cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            letter-spacing: 0.3px; background: transparent; border: none;
+        }
+        .vc-tab.active {
+            background: var(--card);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: none;
+        }
+        [data-theme="dark"] .vc-tab.active { color: #ff8c00; }
+        .vc-tab:not(.active):active { transform: scale(0.97); }
+
+        /* ── RECEIPT VOUCHER ── */
+        .receipt-card {
+            background: var(--card);
+            border-radius: 24px;
+            overflow: hidden;
+            max-width: 360px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08);
+            color: #111;
+            border: 1px solid var(--border);
+        }
+        .receipt-header {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            padding: 28px 28px 44px;
+            text-align: center;
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+        .receipt-header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .receipt-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 28px;
+            background: var(--card);
+            border-radius: 50% 50% 0 0 / 28px 28px 0 0;
+        }
+        .receipt-store-emoji { font-size: 40px; margin-bottom: 8px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+        .receipt-store-name { font-size: 22px; font-weight: 900; letter-spacing: 1px; }
+        .receipt-label {
+            font-size: 10px; font-weight: 800; opacity: 0.7;
+            letter-spacing: 4px; text-transform: uppercase; margin-top: 6px; display: block;
+        }
+        .receipt-body { padding: 8px 24px 0; }
+        .receipt-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .receipt-row:last-of-type { border-bottom: none; }
+        .receipt-row span:first-child {
+            color: var(--text-sec); font-weight: 700; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .receipt-row span:last-child { font-weight: 800; color: var(--text); font-size: 14px; }
+        .receipt-total {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            margin: 12px 0 0;
+            padding: 18px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
+        .receipt-total-label { font-size: 11px; font-weight: 800; opacity: 0.8; text-transform: uppercase; letter-spacing: 2px; }
+        .receipt-total-amount { font-size: 24px; font-weight: 900; }
+        /* Receipt perforated edge */
+        .receipt-perforation {
+            display: flex; align-items: center; gap: 0;
+            margin: 0 -1px; overflow: hidden;
+        }
+        .receipt-perforation::before, .receipt-perforation::after {
+            content: '';
+            flex: 1; height: 2px;
+            border-top: 2px dashed var(--border);
+        }
+        .receipt-hole {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--bg); border: 1px solid var(--border);
+            flex-shrink: 0; margin: 0 -10px; z-index: 1;
+        }
+        .receipt-hole-left { margin-left: -10px; }
+        .receipt-hole-right { margin-right: -10px; }
+
+        /* ── COUPON CARD ── */
+        .coupon-card {
+            max-width: 360px;
+            margin: 0 auto;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            background: #fff;
+        }
+        .coupon-top {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 32px 28px 24px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .coupon-top::before {
+            content: '';
+            position: absolute;
+            top: -50px; left: -50px;
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+        .coupon-top::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; right: -30px;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .coupon-store {
+            font-size: 10px; font-weight: 900;
+            letter-spacing: 5px; opacity: 0.6;
+            text-transform: uppercase; margin-bottom: 14px;
+            position: relative; z-index: 1;
+        }
+        .coupon-desc {
+            font-size: 30px; font-weight: 900;
+            line-height: 1.1; position: relative; z-index: 1;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .coupon-divider {
+            display: flex; align-items: center;
+            background: var(--bg);
+            position: relative;
+        }
+        .coupon-notch-left, .coupon-notch-right {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--bg);
+            flex-shrink: 0;
+        }
+        .coupon-notch-left { margin-left: -14px; border-right: 1px solid var(--border); }
+        .coupon-notch-right { margin-right: -14px; border-left: 1px solid var(--border); }
+        .coupon-dashed-line {
+            flex: 1; height: 2px;
+            background: repeating-linear-gradient(to right, var(--border) 0, var(--border) 8px, transparent 8px, transparent 16px);
+        }
+        .coupon-bottom {
+            background: var(--card);
+            padding: 20px 28px 28px;
+            text-align: center;
+        }
+        .coupon-code-badge {
+            display: inline-block;
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 24px; font-weight: 900;
+            letter-spacing: 6px;
+            color: var(--text);
+            padding: 12px 28px;
+            margin-bottom: 12px;
+        }
+        .coupon-exp { font-size: 11px; font-weight: 700; color: var(--text-sec); letter-spacing: 1px; }
 
         /* ================= INVENTORY ================= */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
@@ -105,13 +318,7 @@
         .modal-content { background: var(--card); width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); transform: scale(0.95); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
         .modal.show .modal-content { transform: scale(1); }
         
-        /* Vouchers */
-        .vc-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .vc-tab { flex: 1; padding: 12px; text-align: center; background: var(--card); font-weight: 700; border-radius: 10px; border: 1px solid var(--border); color: var(--text-sec); cursor: pointer;}
-        .vc-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .receipt-card { background: #fff; padding: 24px; border-radius: 12px; color: #111; max-width: 340px; margin: 0 auto; border: 1px solid #e2e8f0; }
-        .coupon-card { background: linear-gradient(135deg, #ff8c00, #ff4500); padding: 24px; border-radius: 16px; color: #fff; text-align: center; max-width: 340px; margin: 0 auto; }
-        .coupon-code { background: #fff; color: #ff4500; font-family: monospace; font-size: 18px; padding: 8px 16px; border-radius: 8px; font-weight: bold; display: inline-block; margin-bottom: 10px;}
+
 
         .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
@@ -133,10 +340,7 @@
             </button>
             <span id="ui-store-name" style="font-weight: 800; font-size: 18px; color: var(--primary);">PCA Store</span>
         </div>
-        <button id="auth-btn" class="auth-btn" onclick="window.handleAuthClick()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-right:4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-            <span id="auth-btn-text">Sign In</span>
-        </button>
+        <div id="header-auth-status" style="font-size:12px; font-weight:700; color:var(--text-sec);"></div>
     </header>
 
     <div class="overlay" id="overlay" onclick="window.toggleSidebar()"></div>
@@ -185,8 +389,8 @@
         </div>
         
         <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input type="text" id="search-input" placeholder="Search Package or Formula..." oninput="window.renderInventory()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
 
         <div class="stats-grid">
@@ -245,18 +449,26 @@
                 <div class="input-group"><label>Total Amount (KS)</label><input type="number" class="input-field" id="v-price" oninput="window.updateV()"></div>
             </div>
             <div class="receipt-card" id="print-v">
-                <div style="text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; color:#111;">
-                    <h2 style="margin-bottom: 5px;" id="vo-store">PCA Store</h2>
-                    <span style="font-size: 11px; font-weight:800;">PAYMENT RECEIPT</span>
+                <div class="receipt-header">
+                    <span class="receipt-store-emoji">🎮</span>
+                    <div class="receipt-store-name" id="vo-store">PCA Store</div>
+                    <span class="receipt-label">Payment Receipt</span>
                 </div>
-                <div class="receipt-row"><span>Date:</span> <span id="vo-date">-</span></div>
-                <div class="receipt-row"><span>Customer:</span> <span id="vo-name">-</span></div>
-                <div class="receipt-row"><span>Game/ID:</span> <span id="vo-game">-</span></div>
-                <div class="receipt-row"><span>Package:</span> <span id="vo-item">-</span></div>
-                <div class="receipt-row"><span>Status:</span> <span style="color: #10b981;">Successful</span></div>
-                <div style="border-top: 2px dashed #cbd5e1; margin-top: 15px; padding-top: 15px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 800; font-size: 14px;">Total Paid</span>
-                    <span style="font-weight: 900; font-size: 20px; color: #1877f2;" id="vo-price">0 KS</span>
+                <div class="receipt-body">
+                    <div class="receipt-row"><span>Date</span> <span id="vo-date">-</span></div>
+                    <div class="receipt-row"><span>Customer</span> <span id="vo-name">-</span></div>
+                    <div class="receipt-row"><span>Game / ID</span> <span id="vo-game">-</span></div>
+                    <div class="receipt-row"><span>Package</span> <span id="vo-item">-</span></div>
+                    <div class="receipt-row"><span>Status</span> <span style="color:#10b981; font-size:13px;">✓ Successful</span></div>
+                </div>
+                <div class="receipt-perforation">
+                    <div class="receipt-hole receipt-hole-left"></div>
+                    <div style="flex:1; height:2px; background: repeating-linear-gradient(to right, var(--border) 0, var(--border) 8px, transparent 8px, transparent 16px);"></div>
+                    <div class="receipt-hole receipt-hole-right"></div>
+                </div>
+                <div class="receipt-total">
+                    <span class="receipt-total-label">Total Paid</span>
+                    <span class="receipt-total-amount" id="vo-price">0 KS</span>
                 </div>
             </div>
             <button class="btn" style="width: 100%; margin-top: 20px; background:var(--green);" onclick="window.downloadImage('print-v', 'Voucher')">Download Voucher Image</button>
@@ -269,11 +481,19 @@
                 <div class="input-group"><label>Expiry Date</label><input type="text" class="input-field" id="c-exp" oninput="window.updateC()"></div>
             </div>
             <div class="coupon-card" id="print-c">
-                <div class="coupon-inner">
-                    <div class="c-store-name" id="co-store">PCA STORE</div>
-                    <div id="co-desc" style="font-size:26px; font-weight:900; margin:10px 0;">GIFT VOUCHER</div>
-                    <div class="coupon-code" id="co-code">XXXX</div>
-                    <div style="font-size: 11px;">Valid Until: <span id="co-exp">-</span></div>
+                <div class="coupon-top">
+                    <div class="coupon-store" id="co-store">PCA STORE</div>
+                    <div class="coupon-desc" id="co-desc">GIFT VOUCHER</div>
+                </div>
+                <div class="coupon-divider">
+                    <div class="coupon-notch-left"></div>
+                    <div class="coupon-dashed-line"></div>
+                    <div class="coupon-notch-right"></div>
+                </div>
+                <div class="coupon-bottom">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-sec); letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Promo Code</div>
+                    <div class="coupon-code-badge" id="co-code">XXXX</div>
+                    <div class="coupon-exp">Valid Until: <span id="co-exp">-</span></div>
                 </div>
             </div>
             <button class="btn" style="width: 100%; margin-top: 20px; background: #ff8c00;" onclick="window.downloadImage('print-c', 'Coupon')">Download Coupon Image</button>
@@ -283,6 +503,17 @@
     <main class="view" id="view-settings">
         <div class="title-row"><h2>Settings</h2></div>
         
+        <div class="card" id="settings-logout-card" style="display:none; align-items: center; justify-content: space-between; border-left: 4px solid var(--red);">
+            <div>
+                <div style="font-weight:800; font-size:15px;" id="settings-user-name">User</div>
+                <div style="font-size:12px; color:var(--text-sec); font-weight:600;" id="settings-user-email">Logged in</div>
+            </div>
+            <button onclick="window.handleAuthClick()" style="background:var(--red); color:white; padding:10px 18px; border-radius:10px; font-weight:800; font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Log Out
+            </button>
+        </div>
+
         <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: 700;">Dark Mode</span>
             <label class="toggle-switch"><input type="checkbox" id="theme-toggle" onchange="window.toggleTheme()"><span class="slider"></span></label>
@@ -311,6 +542,28 @@
         </div>
     </main>
 
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="modal-login" style="z-index:99999;">
+        <div class="modal-content" style="max-width:360px; text-align:center;">
+            <div style="margin-bottom:24px;">
+                <div style="width:64px; height:64px; background:linear-gradient(135deg, var(--primary), #0d47a1); border-radius:20px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                </div>
+                <h2 style="font-size:22px; font-weight:900; margin-bottom:6px;" id="login-modal-store-name">PCA Store</h2>
+                <p style="font-size:13px; color:var(--text-sec); font-weight:600;">Sign in to sync your data across devices</p>
+            </div>
+            <button id="google-signin-btn" onclick="window.doGoogleLogin()" style="width:100%; background:white; color:#111; border:1.5px solid #e2e8f0; border-radius:12px; padding:14px 20px; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor:pointer; transition:0.2s;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+                <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+                Continue with Google
+            </button>
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+                <button onclick="window.continueOffline()" style="color:var(--text-sec); font-size:13px; font-weight:600; background:transparent; border:none; cursor:pointer; padding:8px;">
+                    Continue without signing in →
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="modal-game">
         <div class="modal-content">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -337,8 +590,8 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            <div class="input-group"><label>Package Name (e.g. 86)</label><input type="text" class="input-field" id="mi-name"></div>
-            <div class="input-group"><label>Formula / Details (e.g. 78 + 8)</label><input type="text" class="input-field" id="mi-combo"></div>
+            <div class="input-group"><label>Package Name</label><input type="text" class="input-field" id="mi-name"></div>
+            <div class="input-group"><label>Formula / Details</label><input type="text" class="input-field" id="mi-combo"></div>
             <div style="display:flex; gap:12px;">
                 <div class="input-group" style="flex:1;"><label>Cost (R$)</label><input type="number" class="input-field" id="mi-cost-rs"></div>
                 <div class="input-group" style="flex:1;"><label>Cost (MMK)</label><input type="number" class="input-field" id="mi-cost-mmk"></div>
@@ -412,18 +665,34 @@
             if(auth) {
                 auth.onAuthStateChanged(user => {
                     if (user) { 
-                        state.uid = user.uid; 
-                        document.getElementById('auth-btn-text').innerText = 'Log Out';
-                        document.getElementById('auth-btn').style.background = 'var(--red)';
-                        document.getElementById('auth-btn').style.boxShadow = '0 2px 5px rgba(239,68,68,0.3)';
+                        state.uid = user.uid;
+                        window.closeModal('modal-login');
+                        // Header status
+                        const hdr = document.getElementById('header-auth-status');
+                        if(hdr) { hdr.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" style="display:inline-block; vertical-align:middle; margin-right:4px;"><circle cx="5" cy="5" r="5" fill="var(--green)"/></svg>Synced`; }
+                        // Settings logout card
+                        const card = document.getElementById('settings-logout-card');
+                        if(card) { card.style.display = 'flex'; }
+                        const un = document.getElementById('settings-user-name');
+                        const ue = document.getElementById('settings-user-email');
+                        if(un) un.innerText = user.displayName || 'User';
+                        if(ue) ue.innerText = user.email || '';
                         syncDataWithCloud();
                     } else { 
-                        state.uid = null; 
-                        document.getElementById('auth-btn-text').innerText = 'Sign In';
-                        document.getElementById('auth-btn').style.background = 'var(--primary)';
-                        document.getElementById('auth-btn').style.boxShadow = '0 2px 5px rgba(24,119,242,0.3)';
+                        state.uid = null;
+                        // Header status
+                        const hdr = document.getElementById('header-auth-status');
+                        if(hdr) hdr.innerHTML = '';
+                        // Settings logout card
+                        const card = document.getElementById('settings-logout-card');
+                        if(card) { card.style.display = 'none'; }
+                        // Show login modal only on first load (not after explicit offline skip)
+                        if(!window._offlineMode) window.openModal('modal-login');
                     }
                 });
+            } else {
+                // No firebase — show login modal
+                window.openModal('modal-login');
             }
         };
 
@@ -431,21 +700,47 @@
             if(state.uid) {
                 window.confirmLogoutOnly();
             } else {
-                if(!auth) { window.showToast("Firebase error. Refresh page.", "error"); return; }
-                window.showToast("Opening Google Login...");
-                auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-                    return auth.signInWithPopup(googleProvider);
-                }).then(result => {
-                    state.uid = result.user.uid;
-                    window.showToast("Login Successful!");
-                    syncDataWithCloud();
-                }).catch(error => {
-                    window.showToast("Login Failed.", "error");
-                });
+                window.openModal('modal-login');
             }
         };
 
-        window.confirmLogoutOnly = function() { window.showConfirm("Log Out", "Are you sure you want to log out? Your local data will remain safe on this device.", () => { if(auth) auth.signOut(); state.uid = null; window.showToast("Logged out successfully"); }); };
+        window.doGoogleLogin = function() {
+            if(!auth) { window.showToast("Firebase error. Refresh page.", "error"); return; }
+            const btn = document.getElementById('google-signin-btn');
+            if(btn) { btn.innerHTML = '<span style="font-size:14px; font-weight:700;">Signing in...</span>'; btn.disabled = true; }
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+                return auth.signInWithPopup(googleProvider);
+            }).then(result => {
+                state.uid = result.user.uid;
+                window.showToast("Login Successful!");
+                syncDataWithCloud();
+            }).catch(error => {
+                window.showToast("Login Failed. Try again.", "error");
+                if(btn) { btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>Continue with Google`; btn.disabled = false; }
+            });
+        };
+
+        window.continueOffline = function() {
+            window._offlineMode = true;
+            window.closeModal('modal-login');
+            window.showToast("Working offline — data saved locally only");
+        };
+
+        window.confirmLogoutOnly = function() { window.showConfirm("Log Out", "Are you sure you want to log out?", () => {
+            if(auth) auth.signOut();
+            state.uid = null;
+            state.data = {};
+            state.sales = [];
+            state.activeGame = '';
+            state.profile = { name: 'PCA Store', tgToken: '', tgChatId: '' };
+            localStorage.removeItem('pcaStoreData');
+            localStorage.removeItem('pcaSalesData');
+            localStorage.removeItem('pcaStoreProfile');
+            window._offlineMode = false;
+            applyGlobalUI();
+            window.showToast("Logged out successfully");
+            setTimeout(() => window.openModal('modal-login'), 400);
+        }); };
 
         // ================= DATA LOADING & SYNC (Preserving Local Data) =================
         function loadLocalDataFallback() {
@@ -477,7 +772,7 @@
                     let cloudProf = cData.profile || {};
                     let cloudSales = cData.salesHistory || [];
 
-                    // 1. Merge Inventory (Local Data OVERWRITES Cloud on exact conflicts to save recent work)
+                    // 1. Merge Inventory (Cloud is master; local additions layered on top)
                     if (Object.keys(state.data).length === 0) {
                         state.data = cloudInv;
                     } else {
@@ -485,25 +780,31 @@
                     }
 
                     // 2. Profile Merge
-                    if(!state.profile.tgToken && cloudProf.tgToken) state.profile = cloudProf;
+                    if(cloudProf && cloudProf.name) {
+                        state.profile = { ...cloudProf, ...state.profile };
+                    }
 
-                    // 3. Sales Merge
-                    if(state.sales.length === 0) state.sales = cloudSales;
+                    // 3. Sales Merge (deduplicate by time+name)
+                    if(cloudSales.length > 0) {
+                        const localKeys = new Set(state.sales.map(s => s.date + s.time + s.name));
+                        const newFromCloud = cloudSales.filter(s => !localKeys.has(s.date + s.time + s.name));
+                        state.sales = [...state.sales, ...newFromCloud];
+                    }
+                } else {
+                    // BUG FIX: New user — do NOT carry over leftover local data from a previous user.
+                    // Clear state so nothing bleeds into this user's fresh cloud document.
+                    state.data = {};
+                    state.sales = [];
+                    state.activeGame = '';
+                    saveDataToLocal();
                 }
                 
-                // Force save the beautifully merged data back to Cloud to secure it
                 saveDataToCloud();
                 applyGlobalUI();
                 window.showToast("Data Synced Successfully!");
             }).catch(e => {
                 window.showToast("Cloud sync failed. Working offline.", "error");
             });
-        }
-
-        function saveDataToLocal() {
-            localStorage.setItem('pcaStoreData', JSON.stringify(state.data));
-            localStorage.setItem('pcaStoreProfile', JSON.stringify(state.profile));
-            localStorage.setItem('pcaSalesData', JSON.stringify(state.sales));
         }
 
         function saveDataToLocal() {
@@ -527,6 +828,7 @@
             document.getElementById('vo-store').innerText = state.profile.name;
             document.getElementById('co-store').innerText = state.profile.name;
             document.getElementById('vo-date').innerText = new Date().toLocaleDateString();
+            const lms = document.getElementById('login-modal-store-name'); if(lms) lms.innerText = state.profile.name;
             if(state.viewMode === 'desktop') { document.getElementById('inv-mobile-container').style.display = 'none'; document.getElementById('inv-desktop-container').style.display = 'block'; } 
             else { document.getElementById('inv-mobile-container').style.display = 'block'; document.getElementById('inv-desktop-container').style.display = 'none'; }
             window.renderSidebarGames(); window.renderInventory(); window.renderSales();
