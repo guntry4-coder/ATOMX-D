@@ -25,13 +25,13 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; width: 100vw; font-size: var(--font-size); transition: background 0.3s, color 0.3s;}
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; width: 100vw; font-size: var(--font-size); transition: background 0.3s, color 0.3s; }
         input, select, textarea { outline: none; }
         button { cursor: pointer; border: none; background: transparent; color: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 6px;}
         svg { display: block; }
 
         /* ================= TOAST ================= */
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100000; font-weight: 600; font-size: 13px; transition: 0.3s; opacity: 0; text-align: center; max-width: 90%;}
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100000; font-weight: 600; font-size: 13px; transition: 0.3s; opacity: 0; text-align: center; max-width: 90%; pointer-events: none;}
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* ================= LAYOUT ================= */
@@ -42,16 +42,17 @@
         .overlay.show { display: block; }
         
         .sidebar-header { height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); font-weight: 800; font-size: 18px; color: var(--primary);}
-        .menu-item { padding: 14px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-radius: 8px; margin: 4px 10px;}
+        .menu-item { padding: 14px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-radius: 8px; margin: 4px 10px; transition: 0.2s;}
+        .menu-item:active { transform: scale(0.98); }
         .menu-item.active { color: var(--primary); background: rgba(24, 119, 242, 0.05); }
         [data-theme="dark"] .menu-item.active { background: rgba(255, 140, 0, 0.1); }
         
-        .game-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; margin: 4px 10px; border-radius: 8px; background: var(--bg); font-size: 14px; font-weight: 600;}
+        .game-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; margin: 4px 10px; border-radius: 8px; background: var(--bg); font-size: 14px; font-weight: 600; cursor: pointer;}
         .game-item.active { border-left: 4px solid var(--primary); background: var(--hover); }
 
         .view { display: none; padding-top: 60px; height: 100vh; overflow-y: auto; padding-bottom: 100px; }
         .view.active { display: block; padding: 80px 20px 100px; }
-        .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         
         .btn { background: var(--primary); color: white; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;}
         .btn:active { transform: scale(0.96); }
@@ -60,6 +61,14 @@
         .input-field { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 15px; font-weight: 600;}
         .card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border);}
 
+        /* ================= SEARCH BAR (SOLID & LIQUID) ================= */
+        .search-box { position: relative; margin-bottom: 24px; }
+        .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sec); transition: 0.3s ease; }
+        .search-box input { width: 100%; padding: 16px 16px 16px 48px; border-radius: 14px; border: 2px solid var(--border); background: var(--card); color: var(--text); font-size: 15px; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(24,119,242,0.15); outline: none;}
+        [data-theme="dark"] .search-box input:focus { box-shadow: 0 0 0 4px rgba(255,140,0,0.15); }
+        .search-box input:focus + svg { color: var(--primary); }
+
         /* ================= INVENTORY ================= */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         .stat-box { background: var(--card); padding: 16px 10px; text-align: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
@@ -67,7 +76,7 @@
         
         .mobile-item-card { background: var(--card); padding: 16px; border-radius: 14px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
         .item-header { display: flex; justify-content: space-between; align-items: center;}
-        .combo-badge { background: var(--bg); color: var(--text-sec); font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); font-weight: 700;}
+        .combo-badge { background: var(--bg); color: var(--text-sec); font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); font-weight: 700; margin-left:8px;}
         .item-prices { display: flex; gap: 12px; font-size: 13px; color: var(--text-sec); background: var(--bg); padding: 10px; border-radius: 8px; font-weight: 600;}
         .item-profit-row { display: flex; justify-content: space-between; background: var(--bg); padding: 12px; border-radius: 8px; align-items: center;}
 
@@ -109,7 +118,7 @@
 
     <div id="toast">Message</div>
 
-    <div id="auth-screen">
+    <div id="auth-screen" style="display: none;">
         <div class="card" style="width: 90%; max-width: 360px; text-align: center; padding: 40px 24px;">
             <h1 style="color: var(--primary); margin-bottom: 8px; font-weight: 900; font-size: 32px;">PCA STORE</h1>
             <p style="font-size: 14px; color: var(--text-sec); margin-bottom: 40px; font-weight: 600;">Manager Dashboard Login</p>
@@ -180,6 +189,11 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 Copy List
             </button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search Package or Formula..." oninput="window.renderInventory()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
         
         <div class="stats-grid">
@@ -387,6 +401,27 @@
         window.showConfirm = function(title, msg, onConfirm) { document.getElementById('confirm-title').innerText = title; document.getElementById('confirm-msg').innerText = msg; confirmActionCallback = onConfirm; window.openModal('modal-confirm'); };
         window.closeConfirm = function() { window.closeModal('modal-confirm'); confirmActionCallback = null; };
 
+        // ================= DATA LOADING =================
+        function loadLocalDataFallback() {
+            try {
+                var json = localStorage.getItem('pcaStoreData'); if(json) state.data = JSON.parse(json); else state.data = {};
+                var profileJson = localStorage.getItem('pcaStoreProfile'); if(profileJson) state.profile = JSON.parse(profileJson);
+                var salesJson = localStorage.getItem('pcaSalesData'); if(salesJson) state.sales = JSON.parse(salesJson);
+                var sTheme = localStorage.getItem('pcaTheme'); if(sTheme) { state.theme = sTheme; document.documentElement.setAttribute('data-theme', sTheme); document.getElementById('theme-toggle').checked = (sTheme==='dark');}
+                var sView = localStorage.getItem('pcaViewMode'); if(sView) { state.viewMode = sView; document.getElementById('view-toggle').checked = (sView==='desktop'); }
+                var sFont = localStorage.getItem('pcaFontSize'); if(sFont) { state.fontSize = parseInt(sFont); window.changeFontSize(state.fontSize); }
+            } catch(e) {}
+
+            var games = Object.keys(state.data); 
+            if(games.length > 0) {
+                state.activeGame = games[0];
+                games.forEach(g => { if(!state.data[g].items) state.data[g].items = []; });
+            } else {
+                state.activeGame = "";
+            }
+            applyGlobalUI();
+        }
+
         // ================= FIREBASE CONFIG & AUTH LOGIC =================
         const firebaseConfig = {
             apiKey: "AIzaSyBCBimkrfs-TGM-TioINkZfmQiBvIBsp1s",
@@ -421,6 +456,8 @@
         };
 
         window.onload = () => {
+            loadLocalDataFallback(); 
+
             if(auth) {
                 auth.onAuthStateChanged(user => {
                     if (user) { 
@@ -438,43 +475,43 @@
             }
         };
 
-        // ================= DATA LOGIC =================
-        function loadLocalDataFallback() {
-            try {
-                var json = localStorage.getItem('pcaData'); if(json) state.data = JSON.parse(json);
-                var profileJson = localStorage.getItem('pcaStoreProfile'); if(profileJson) state.profile = JSON.parse(profileJson);
-                var salesJson = localStorage.getItem('pcaSalesData'); if(salesJson) state.sales = JSON.parse(salesJson);
-                var sTheme = localStorage.getItem('pcaTheme'); if(sTheme) { state.theme = sTheme; document.documentElement.setAttribute('data-theme', sTheme); document.getElementById('theme-toggle').checked = (sTheme==='dark');}
-                var sView = localStorage.getItem('pcaViewMode'); if(sView) { state.viewMode = sView; document.getElementById('view-toggle').checked = (sView==='desktop'); }
-                var sFont = localStorage.getItem('pcaFontSize'); if(sFont) { state.fontSize = parseInt(sFont); window.changeFontSize(state.fontSize); }
-                var games = Object.keys(state.data); if(games.length > 0) state.activeGame = games[0];
-            } catch(e) {}
-            applyGlobalUI();
-        }
-
         function loadCloudData() {
-            if(!db || !state.uid) return loadLocalDataFallback();
+            if(!db || !state.uid) return;
             db.collection("stores").doc(state.uid).get().then(snap => {
+                let cloudHasData = false;
                 if(snap.exists) {
                     var d = snap.data();
-                    if(d.data) state.data = d.data;
-                    if(d.profile) state.profile = d.profile;
-                    if(d.salesHistory) state.sales = d.salesHistory;
-                    var games = Object.keys(state.data); if(games.length > 0) state.activeGame = games[0];
-                    localStorage.setItem('pcaData', JSON.stringify(state.data));
-                    localStorage.setItem('pcaStoreProfile', JSON.stringify(state.profile));
-                    localStorage.setItem('pcaSalesData', JSON.stringify(state.sales));
+                    if((d.data && Object.keys(d.data).length > 0) || (d.inventory && Object.keys(d.inventory).length > 0)) {
+                        cloudHasData = true;
+                        if(d.inventory) state.data = d.inventory;
+                        else if(d.data) state.data = d.data;
+
+                        if(d.profile) state.profile = d.profile;
+                        if(d.salesHistory) state.sales = d.salesHistory;
+                    }
                 }
-                applyGlobalUI();
-            }).catch(e => { loadLocalDataFallback(); });
+                
+                if (!cloudHasData) {
+                    // Cloud empty, push local to cloud to prevent data loss!
+                    saveDataToCloud();
+                } else {
+                    var games = Object.keys(state.data); if(games.length > 0) state.activeGame = games[0];
+                    saveDataToLocal();
+                    applyGlobalUI();
+                }
+            }).catch(e => { console.log("Cloud sync error"); });
+        }
+
+        function saveDataToLocal() {
+            localStorage.setItem('pcaStoreData', JSON.stringify(state.data));
+            localStorage.setItem('pcaStoreProfile', JSON.stringify(state.profile));
+            localStorage.setItem('pcaSalesData', JSON.stringify(state.sales));
         }
 
         function saveDataToCloud() {
-            localStorage.setItem('pcaData', JSON.stringify(state.data));
-            localStorage.setItem('pcaStoreProfile', JSON.stringify(state.profile));
-            localStorage.setItem('pcaSalesData', JSON.stringify(state.sales));
+            saveDataToLocal();
             if(auth && state.uid && db) {
-                db.collection("stores").doc(state.uid).set({ data: state.data, profile: state.profile, salesHistory: state.sales }, {merge: true}).catch(e=>{});
+                db.collection("stores").doc(state.uid).set({ inventory: state.data, data: state.data, profile: state.profile, salesHistory: state.sales }, {merge: true}).catch(e=>{});
             }
         }
 
@@ -499,7 +536,7 @@
 
         window.confirmLogoutOnly = function() { window.showConfirm("Logout Only", "Are you sure you want to log out? Your local catalog data will remain safe on this device.", () => { if(auth) auth.signOut(); state.uid = null; document.getElementById('auth-screen').style.display = 'flex'; window.showToast("Logged out"); }); };
 
-        // ================= SIDEBAR =================
+        // ================= SIDEBAR & NAVIGATION =================
         window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); };
         window.switchView = function(v) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active')); document.getElementById('view-' + v).classList.add('active');
@@ -508,7 +545,7 @@
             if(v === 'inventory') window.renderInventory(); if(v === 'sales') window.renderSales();
         };
 
-        // ================= GAME MANAGMENT =================
+        // ================= GAME MANAGMENT (Add & Edit) =================
         window.renderSidebarGames = function() {
             const list = document.getElementById('sidebar-games-list'); list.innerHTML = '';
             Object.keys(state.data).forEach(gName => {
@@ -522,13 +559,13 @@
                     </div>`;
             });
         };
-        window.selectGame = function(name) { state.activeGame = name; window.renderSidebarGames(); window.renderInventory(); window.toggleSidebar(); };
+        window.selectGame = function(name) { state.activeGame = name; document.getElementById('search-input').value = ''; window.renderSidebarGames(); window.renderInventory(); window.toggleSidebar(); };
         window.confirmDeleteGame = function(name, e) { e.stopPropagation(); window.showConfirm("Delete Game", `Are you sure you want to delete ${name}?`, () => { delete state.data[name]; state.activeGame = Object.keys(state.data)[0] || ''; saveDataToCloud(); applyGlobalUI(); }); };
         
         window.openEditGameModal = function(name, e) {
             if(e) e.stopPropagation();
             isEditingGame = true; editingGameOriginalName = name;
-            document.getElementById('game-modal-title').innerText = "Edit Game";
+            document.getElementById('game-modal-title').innerText = "Edit Game Configuration";
             document.getElementById('mg-name').value = name;
             tempBase64Image = state.data[name].image || "";
             if(tempBase64Image) { document.getElementById('mg-img-preview').src = tempBase64Image; document.getElementById('mg-img-preview').style.display = 'block'; }
@@ -546,24 +583,36 @@
                 state.data[name].image = tempBase64Image; state.activeGame = name; window.showToast("Game updated!");
             } else {
                 if(state.data[name]) return window.showToast("Game already exists", "error");
-                state.data[name] = { image: tempBase64Image, items: [] }; state.activeGame = name; window.showToast("Game Added!");
+                state.data[name] = { image: tempBase64Image, items: [] }; state.activeGame = name; window.showToast("Game Added Successfully!");
             }
             isEditingGame = false; saveDataToCloud(); applyGlobalUI(); window.closeModal('modal-game');
         };
 
-        // ================= INVENTORY GRID =================
+        // ================= INVENTORY GRID & REALTIME SEARCH =================
         window.renderInventory = function() {
             const titleEl = document.getElementById('inv-game-title'); const mobileCon = document.getElementById('inv-mobile-container'); const desktopBody = document.getElementById('inv-table-body');
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
             mobileCon.innerHTML = ''; desktopBody.innerHTML = '';
             
-            if(!state.activeGame || !state.data[state.activeGame]) { titleEl.innerText = "Select Game"; return; }
+            if(!state.activeGame || !state.data[state.activeGame]) { titleEl.innerText = "No Data Found"; return; }
             titleEl.innerText = state.activeGame;
 
             const gData = state.data[state.activeGame];
             let tc = 0, tr = 0;
+            let itemsFound = false;
 
-            if(gData.items) {
+            if(gData.items && gData.items.length > 0) {
                 gData.items.forEach((itm, idx) => {
+                    // Auto Search Filter Logic
+                    if (query) {
+                        const nameMatch = itm.name && itm.name.toLowerCase().includes(query);
+                        const comboMatch = itm.combo && itm.combo.toLowerCase().includes(query);
+                        if (!nameMatch && !comboMatch) return; // Skip if no match
+                    }
+
+                    itemsFound = true;
                     let costRS = parseFloat(itm.costRS) || 0; 
                     let costMMK = parseFloat(itm.costMMK) || parseFloat(itm.cost) || 0; 
                     let sell = parseFloat(itm.sell) || 0; let profit = sell - costMMK; 
@@ -597,7 +646,18 @@
                             <td><button onclick="window.recordSale(${idx}, event)" style="color:var(--primary); font-weight:800; background:rgba(24,119,242,0.1); padding:8px 14px; border-radius:8px; display:flex; align-items:center; gap:6px;">${svgCart} Sell</button></td>
                         </tr>`;
                 });
+            } 
+            
+            if(!itemsFound) {
+                if(query) {
+                    mobileCon.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-sec); font-weight:bold;">No results found for "${query}"</div>`;
+                    desktopBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-sec); font-weight:bold;">No results found for "${query}"</td></tr>`;
+                } else {
+                    mobileCon.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--text-sec); font-weight:bold;">No packages added yet. Click '+' to add one.</div>`;
+                    desktopBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 40px; color: var(--text-sec); font-weight:bold;">No packages added yet. Click '+' to add one.</td></tr>`;
+                }
             }
+
             document.getElementById('stat-cost').innerText = tc + " KS"; document.getElementById('stat-rev').innerText = tr + " KS"; document.getElementById('stat-prof').innerText = (tr-tc) + " KS"; document.getElementById('stat-prof').style.color = (tr-tc) < 0 ? 'var(--red)' : 'var(--primary)';
         };
 
@@ -649,7 +709,7 @@
 
         window.confirmClearSales = function() { window.showConfirm("Clear Sales", "Reset daily transaction history for today?", () => { state.sales = state.sales.filter(s => s.date !== new Date().toLocaleDateString()); saveDataToCloud(); window.renderSales(); window.showToast("Cleared"); }); };
 
-        // ================= TELEGRAM (HTML PARSING BUG FIX) =================
+        // ================= TELEGRAM =================
         window.sendTelegram = async function() {
             var token = state.profile.tgToken; var chatId = state.profile.tgChatId;
             if(!token || !chatId) { window.switchView('settings'); return window.showToast("Set Telegram Keys in Settings", "error"); }
@@ -668,7 +728,7 @@
             } catch(e) { window.showToast("Connection failed", "error"); }
         };
 
-        // ================= VOUCHER & COUPON (Blob Fix) =================
+        // ================= VOUCHER & COUPON =================
         window.switchVCTab = function(t) { document.getElementById('tab-v').classList.remove('active'); document.getElementById('tab-c').classList.remove('active'); document.getElementById('sec-v').style.display = 'none'; document.getElementById('sec-c').style.display = 'none'; document.getElementById('tab-'+t).classList.add('active'); document.getElementById('sec-'+t).style.display = 'block'; };
         window.updateV = function() { document.getElementById('vo-name').innerText = document.getElementById('v-name').value || "-"; document.getElementById('vo-game').innerText = document.getElementById('v-game').value || "-"; document.getElementById('vo-item').innerText = document.getElementById('v-item').value || "-"; document.getElementById('vo-price').innerText = (document.getElementById('v-price').value || "0") + " KS"; };
         window.updateC = function() { document.getElementById('co-desc').innerText = document.getElementById('c-desc').value || "GIFT VOUCHER"; document.getElementById('co-code').innerText = document.getElementById('c-code').value.toUpperCase() || "XXXX"; document.getElementById('co-exp').innerText = document.getElementById('c-exp').value || "-"; };
