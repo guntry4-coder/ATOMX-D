@@ -31,15 +31,20 @@
         svg { display: block; }
 
         /* ================= TOAST ================= */
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100000; font-weight: 600; font-size: 13px; transition: 0.3s; opacity: 0; text-align: center; max-width: 90%; pointer-events: none;}
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100000; font-weight: 600; font-size: 13px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; pointer-events: none; text-align: center; white-space: nowrap;}
         #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* ================= LAYOUT ================= */
-        .header { height: 60px; background: var(--card); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: var(--shadow); position: fixed; top: 0; width: 100%; z-index: 40; }
-        .sidebar { width: 290px; background: var(--card); height: 100vh; position: fixed; left: -310px; top: 0; z-index: 100; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); border-right: 1px solid var(--border);}
+        /* ================= HEADER ================= */
+        .header { height: 60px; background: var(--card); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; box-shadow: var(--shadow); position: fixed; top: 0; width: 100%; z-index: 40; border-bottom: 1px solid var(--border);}
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .auth-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; transition: 0.2s; box-shadow: 0 2px 5px rgba(24,119,242,0.3);}
+        .auth-btn:active { transform: scale(0.95); }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar { width: 290px; background: var(--card); height: 100vh; position: fixed; left: -310px; top: 0; z-index: 100; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); border-right: 1px solid var(--border);}
         .sidebar.open { left: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 50; display: none; }
-        .overlay.show { display: block; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 50; display: none; opacity: 0; transition: 0.3s;}
+        .overlay.show { display: block; opacity: 1;}
         
         .sidebar-header { height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); font-weight: 800; font-size: 18px; color: var(--primary);}
         .menu-item { padding: 14px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; font-weight: 600; color: var(--text-sec); border-radius: 8px; margin: 4px 10px; transition: 0.2s;}
@@ -50,8 +55,9 @@
         .game-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; margin: 4px 10px; border-radius: 8px; background: var(--bg); font-size: 14px; font-weight: 600; cursor: pointer;}
         .game-item.active { border-left: 4px solid var(--primary); background: var(--hover); }
 
+        /* ================= VIEWS ================= */
         .view { display: none; padding-top: 60px; height: 100vh; overflow-y: auto; padding-bottom: 100px; }
-        .view.active { display: block; padding: 80px 20px 100px; }
+        .view.active { display: block; padding: 80px 16px 100px; }
         .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         
         .btn { background: var(--primary); color: white; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;}
@@ -61,18 +67,20 @@
         .input-field { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 15px; font-weight: 600;}
         .card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border);}
 
-        /* ================= SEARCH BAR (SOLID & LIQUID) ================= */
-        .search-box { position: relative; margin-bottom: 24px; }
-        .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sec); transition: 0.3s ease; }
-        .search-box input { width: 100%; padding: 16px 16px 16px 48px; border-radius: 14px; border: 2px solid var(--border); background: var(--card); color: var(--text); font-size: 15px; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(24,119,242,0.15); outline: none;}
-        [data-theme="dark"] .search-box input:focus { box-shadow: 0 0 0 4px rgba(255,140,0,0.15); }
+        /* ================= AUTO SEARCH BAR (SOLID & LIQUID) ================= */
+        .search-box { position: relative; margin-bottom: 20px; width: 100%;}
+        .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sec); transition: 0.3s ease; pointer-events: none;}
+        .search-box input { width: 100%; padding: 16px 16px 16px 48px; border-radius: 14px; border: 2px solid transparent; background: var(--card); color: var(--text); font-size: 15px; font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow); }
+        /* Liquid Focus Effect */
+        .search-box input:focus { border-color: var(--primary); background: var(--card); box-shadow: 0 0 0 4px rgba(24,119,242,0.15), var(--shadow); outline: none;}
+        [data-theme="dark"] .search-box input:focus { box-shadow: 0 0 0 4px rgba(255,140,0,0.15), var(--shadow); }
         .search-box input:focus + svg { color: var(--primary); }
 
         /* ================= INVENTORY ================= */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .stat-box { background: var(--card); padding: 16px 10px; text-align: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .stat-box span { font-size: 11px; color: var(--text-sec); font-weight: 700; display: block; margin-bottom: 4px; text-transform: uppercase;}
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: var(--card); padding: 12px 6px; text-align: center; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .stat-box span { font-size: 10px; color: var(--text-sec); font-weight: 800; display: block; margin-bottom: 4px; text-transform: uppercase;}
+        .stat-box strong { font-size: 14px; }
         
         .mobile-item-card { background: var(--card); padding: 16px; border-radius: 14px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
         .item-header { display: flex; justify-content: space-between; align-items: center;}
@@ -88,13 +96,14 @@
         td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid var(--border); }
         td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid var(--border); }
 
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 40; transition: 0.2s;}
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(24,119,242,0.4); z-index: 40; transition: 0.2s;}
         .fab:active { transform: scale(0.9); }
         
         /* Modals */
-        .modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .modal.show { display: flex; }
-        .modal-content { background: var(--card); width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; border: 1px solid var(--border);}
+        .modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); display: none; align-items: center; justify-content: center; z-index: 9999; opacity: 0; transition: 0.3s; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-content { background: var(--card); width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); transform: scale(0.95); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+        .modal.show .modal-content { transform: scale(1); }
         
         /* Vouchers */
         .vc-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -111,42 +120,27 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(22px); }
 
-        #auth-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
     <div id="toast">Message</div>
 
-    <div id="auth-screen" style="display: none;">
-        <div class="card" style="width: 90%; max-width: 360px; text-align: center; padding: 40px 24px;">
-            <h1 style="color: var(--primary); margin-bottom: 8px; font-weight: 900; font-size: 32px;">PCA STORE</h1>
-            <p style="font-size: 14px; color: var(--text-sec); margin-bottom: 40px; font-weight: 600;">Manager Dashboard Login</p>
-            
-            <button class="btn" style="width: 100%; background: var(--card); color: var(--text); border: 1px solid var(--border); margin-bottom: 10px; padding: 14px;" onclick="window.loginGoogle()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-                Continue with Google
-            </button>
-            <p style="font-size: 11px; color: var(--text-sec); margin-top: 15px;">Secure authentication required to sync data.</p>
-        </div>
-    </div>
-
     <header class="header">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <button onclick="window.toggleSidebar()">
+        <div class="header-left">
+            <button onclick="window.toggleSidebar()" style="padding: 8px; margin-left: -8px;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="15" y2="18"></line></svg>
             </button>
             <span id="ui-store-name" style="font-weight: 800; font-size: 18px; color: var(--primary);">PCA Store</span>
         </div>
+        <button id="auth-btn" class="auth-btn" onclick="window.handleAuthClick()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-right:4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            <span id="auth-btn-text">Sign In</span>
+        </button>
     </header>
 
     <div class="overlay" id="overlay" onclick="window.toggleSidebar()"></div>
-    <div class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span>Menu</span>
             <button onclick="window.toggleSidebar()">
@@ -187,15 +181,14 @@
             <h2 id="inv-game-title">Select Game</h2>
             <button class="btn" style="background: var(--green);" onclick="window.copyPriceList()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                Copy List
             </button>
         </div>
-
+        
         <div class="search-box">
             <input type="text" id="search-input" placeholder="Search Package or Formula..." oninput="window.renderInventory()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
-        
+
         <div class="stats-grid">
             <div class="stat-box"><span>Total Cost</span><strong id="stat-cost">0</strong></div>
             <div class="stat-box"><span>Total Revenue</span><strong id="stat-rev">0</strong></div>
@@ -217,11 +210,10 @@
 
     <main class="view" id="view-sales">
         <div class="title-row">
-            <h2>Daily Sales Tracker</h2>
+            <h2>Daily Sales</h2>
             <div style="display:flex; gap:10px;">
                 <button class="btn" style="background: #0088cc;" onclick="window.sendTelegram()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    Send Report
                 </button>
                 <button class="btn" style="background: var(--card); color: var(--red); border: 1px solid var(--border);" onclick="window.confirmClearSales()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -229,7 +221,7 @@
             </div>
         </div>
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--green);">
-            <div><span style="font-size:12px; color:var(--text-sec); font-weight:700;">TODAY'S PROFIT</span><br><strong style="font-size:26px;" id="sales-total-profit">0 KS</strong></div>
+            <div><span style="font-size:12px; color:var(--text-sec); font-weight:700;">TODAY'S PROFIT</span><br><strong style="font-size:24px;" id="sales-total-profit">0 KS</strong></div>
             <div style="text-align:right;"><span style="font-size:12px; color:var(--text-sec); font-weight:700;">ITEMS SOLD</span><br><strong style="font-size:20px;" id="sales-total-items">0</strong></div>
         </div>
         <div class="card">
@@ -317,11 +309,6 @@
             
             <button class="btn" style="width: 100%; margin-top: 10px;" onclick="window.saveSettings()">Save Configuration</button>
         </div>
-
-        <button class="btn" style="width: 100%; background: transparent; color: var(--red); border: 2px solid var(--red);" onclick="window.confirmLogoutOnly()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Log Out Only (Keep Local Data)
-        </button>
     </main>
 
     <div class="modal" id="modal-game">
@@ -401,27 +388,6 @@
         window.showConfirm = function(title, msg, onConfirm) { document.getElementById('confirm-title').innerText = title; document.getElementById('confirm-msg').innerText = msg; confirmActionCallback = onConfirm; window.openModal('modal-confirm'); };
         window.closeConfirm = function() { window.closeModal('modal-confirm'); confirmActionCallback = null; };
 
-        // ================= DATA LOADING =================
-        function loadLocalDataFallback() {
-            try {
-                var json = localStorage.getItem('pcaStoreData'); if(json) state.data = JSON.parse(json); else state.data = {};
-                var profileJson = localStorage.getItem('pcaStoreProfile'); if(profileJson) state.profile = JSON.parse(profileJson);
-                var salesJson = localStorage.getItem('pcaSalesData'); if(salesJson) state.sales = JSON.parse(salesJson);
-                var sTheme = localStorage.getItem('pcaTheme'); if(sTheme) { state.theme = sTheme; document.documentElement.setAttribute('data-theme', sTheme); document.getElementById('theme-toggle').checked = (sTheme==='dark');}
-                var sView = localStorage.getItem('pcaViewMode'); if(sView) { state.viewMode = sView; document.getElementById('view-toggle').checked = (sView==='desktop'); }
-                var sFont = localStorage.getItem('pcaFontSize'); if(sFont) { state.fontSize = parseInt(sFont); window.changeFontSize(state.fontSize); }
-            } catch(e) {}
-
-            var games = Object.keys(state.data); 
-            if(games.length > 0) {
-                state.activeGame = games[0];
-                games.forEach(g => { if(!state.data[g].items) state.data[g].items = []; });
-            } else {
-                state.activeGame = "";
-            }
-            applyGlobalUI();
-        }
-
         // ================= FIREBASE CONFIG & AUTH LOGIC =================
         const firebaseConfig = {
             apiKey: "AIzaSyBCBimkrfs-TGM-TioINkZfmQiBvIBsp1s",
@@ -440,66 +406,104 @@
             try { db.enablePersistence().catch(e=>{}); } catch(e){}
         } catch(e) { console.log("Firebase Load Fallback Active."); }
 
-        window.loginGoogle = function() {
-            if(!auth) { window.showToast("Firebase initialization error. Refresh page.", "error"); return; }
-            window.showToast("Loading Google Login...");
-            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-                return auth.signInWithPopup(googleProvider);
-            }).then(result => {
-                state.uid = result.user.uid;
-                document.getElementById('auth-screen').style.display = 'none';
-                window.showToast("Login Successful!");
-                loadCloudData();
-            }).catch(error => {
-                window.showToast("Login Failed: " + error.message, "error");
-            });
-        };
-
         window.onload = () => {
-            loadLocalDataFallback(); 
-
+            loadLocalDataFallback(); // Make sure offline works 100% instantly
+            
             if(auth) {
                 auth.onAuthStateChanged(user => {
                     if (user) { 
                         state.uid = user.uid; 
-                        document.getElementById('auth-screen').style.display = 'none'; 
-                        loadCloudData();
+                        document.getElementById('auth-btn-text').innerText = 'Log Out';
+                        document.getElementById('auth-btn').style.background = 'var(--red)';
+                        document.getElementById('auth-btn').style.boxShadow = '0 2px 5px rgba(239,68,68,0.3)';
+                        syncDataWithCloud();
                     } else { 
                         state.uid = null; 
-                        document.getElementById('auth-screen').style.display = 'flex'; 
+                        document.getElementById('auth-btn-text').innerText = 'Sign In';
+                        document.getElementById('auth-btn').style.background = 'var(--primary)';
+                        document.getElementById('auth-btn').style.boxShadow = '0 2px 5px rgba(24,119,242,0.3)';
                     }
                 });
-            } else {
-                document.getElementById('auth-screen').style.display = 'flex';
-                window.showToast("Cannot connect to server.", "error");
             }
         };
 
-        function loadCloudData() {
-            if(!db || !state.uid) return;
-            db.collection("stores").doc(state.uid).get().then(snap => {
-                let cloudHasData = false;
-                if(snap.exists) {
-                    var d = snap.data();
-                    if((d.data && Object.keys(d.data).length > 0) || (d.inventory && Object.keys(d.inventory).length > 0)) {
-                        cloudHasData = true;
-                        if(d.inventory) state.data = d.inventory;
-                        else if(d.data) state.data = d.data;
+        window.handleAuthClick = function() {
+            if(state.uid) {
+                window.confirmLogoutOnly();
+            } else {
+                if(!auth) { window.showToast("Firebase error. Refresh page.", "error"); return; }
+                window.showToast("Opening Google Login...");
+                auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+                    return auth.signInWithPopup(googleProvider);
+                }).then(result => {
+                    state.uid = result.user.uid;
+                    window.showToast("Login Successful!");
+                    syncDataWithCloud();
+                }).catch(error => {
+                    window.showToast("Login Failed.", "error");
+                });
+            }
+        };
 
-                        if(d.profile) state.profile = d.profile;
-                        if(d.salesHistory) state.sales = d.salesHistory;
+        window.confirmLogoutOnly = function() { window.showConfirm("Log Out", "Are you sure you want to log out? Your local data will remain safe on this device.", () => { if(auth) auth.signOut(); state.uid = null; window.showToast("Logged out successfully"); }); };
+
+        // ================= DATA LOADING & SYNC (Preserving Local Data) =================
+        function loadLocalDataFallback() {
+            try {
+                var json = localStorage.getItem('pcaStoreData'); if(json) state.data = JSON.parse(json); else state.data = {};
+                var profileJson = localStorage.getItem('pcaStoreProfile'); if(profileJson) state.profile = JSON.parse(profileJson);
+                var salesJson = localStorage.getItem('pcaSalesData'); if(salesJson) state.sales = JSON.parse(salesJson);
+                var sTheme = localStorage.getItem('pcaTheme'); if(sTheme) { state.theme = sTheme; document.documentElement.setAttribute('data-theme', sTheme); document.getElementById('theme-toggle').checked = (sTheme==='dark');}
+                var sView = localStorage.getItem('pcaViewMode'); if(sView) { state.viewMode = sView; document.getElementById('view-toggle').checked = (sView==='desktop'); }
+                var sFont = localStorage.getItem('pcaFontSize'); if(sFont) { state.fontSize = parseInt(sFont); window.changeFontSize(state.fontSize); }
+            } catch(e) {}
+
+            var games = Object.keys(state.data); 
+            if(games.length > 0) {
+                state.activeGame = games[0];
+                games.forEach(g => { if(!state.data[g].items) state.data[g].items = []; });
+            } else { state.activeGame = ""; }
+            
+            applyGlobalUI();
+        }
+
+        function syncDataWithCloud() {
+            if(!db || !state.uid) return;
+            
+            db.collection("stores").doc(state.uid).get().then(snap => {
+                if(snap.exists) {
+                    let cData = snap.data();
+                    let cloudInv = cData.data || cData.inventory || {};
+                    let cloudProf = cData.profile || {};
+                    let cloudSales = cData.salesHistory || [];
+
+                    // 1. Merge Inventory (Local Data OVERWRITES Cloud on exact conflicts to save recent work)
+                    if (Object.keys(state.data).length === 0) {
+                        state.data = cloudInv;
+                    } else {
+                        state.data = { ...cloudInv, ...state.data };
                     }
+
+                    // 2. Profile Merge
+                    if(!state.profile.tgToken && cloudProf.tgToken) state.profile = cloudProf;
+
+                    // 3. Sales Merge
+                    if(state.sales.length === 0) state.sales = cloudSales;
                 }
                 
-                if (!cloudHasData) {
-                    // Cloud empty, push local to cloud to prevent data loss!
-                    saveDataToCloud();
-                } else {
-                    var games = Object.keys(state.data); if(games.length > 0) state.activeGame = games[0];
-                    saveDataToLocal();
-                    applyGlobalUI();
-                }
-            }).catch(e => { console.log("Cloud sync error"); });
+                // Force save the beautifully merged data back to Cloud to secure it
+                saveDataToCloud();
+                applyGlobalUI();
+                window.showToast("Data Synced Successfully!");
+            }).catch(e => {
+                window.showToast("Cloud sync failed. Working offline.", "error");
+            });
+        }
+
+        function saveDataToLocal() {
+            localStorage.setItem('pcaStoreData', JSON.stringify(state.data));
+            localStorage.setItem('pcaStoreProfile', JSON.stringify(state.profile));
+            localStorage.setItem('pcaSalesData', JSON.stringify(state.sales));
         }
 
         function saveDataToLocal() {
@@ -534,9 +538,7 @@
         window.changeFontSize = function(val) { state.fontSize = val; document.documentElement.style.setProperty('--font-size', val + 'px'); document.getElementById('font-slider').value = val; document.getElementById('font-value').innerText = val + "px"; localStorage.setItem('pcaFontSize', val); };
         window.saveSettings = function() { state.profile.name = document.getElementById('set-name').value || "PCA Store"; state.profile.tgToken = document.getElementById('set-tg-token').value.trim(); state.profile.tgChatId = document.getElementById('set-tg-chat').value.trim(); saveDataToCloud(); applyGlobalUI(); window.showToast("Settings Configured!"); };
 
-        window.confirmLogoutOnly = function() { window.showConfirm("Logout Only", "Are you sure you want to log out? Your local catalog data will remain safe on this device.", () => { if(auth) auth.signOut(); state.uid = null; document.getElementById('auth-screen').style.display = 'flex'; window.showToast("Logged out"); }); };
-
-        // ================= SIDEBAR & NAVIGATION =================
+        // ================= SIDEBAR =================
         window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); };
         window.switchView = function(v) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active')); document.getElementById('view-' + v).classList.add('active');
@@ -545,7 +547,7 @@
             if(v === 'inventory') window.renderInventory(); if(v === 'sales') window.renderSales();
         };
 
-        // ================= GAME MANAGMENT (Add & Edit) =================
+        // ================= GAME MANAGMENT =================
         window.renderSidebarGames = function() {
             const list = document.getElementById('sidebar-games-list'); list.innerHTML = '';
             Object.keys(state.data).forEach(gName => {
@@ -609,7 +611,7 @@
                     if (query) {
                         const nameMatch = itm.name && itm.name.toLowerCase().includes(query);
                         const comboMatch = itm.combo && itm.combo.toLowerCase().includes(query);
-                        if (!nameMatch && !comboMatch) return; // Skip if no match
+                        if (!nameMatch && !comboMatch) return; 
                     }
 
                     itemsFound = true;
@@ -623,7 +625,6 @@
                     let comboBadgeDesktop = itm.combo ? `<br><span style="font-size:11px; color:var(--text-sec); font-weight:600;">${itm.combo}</span>` : '';
                     let costString = costRS > 0 ? `R$ ${costRS} / ${costMMK} KS` : `${costMMK} KS`;
                     let costDesktop = costRS > 0 ? `<b>${costMMK} KS</b><br><span style="font-size:11px; color:var(--text-sec);">R$ ${costRS}</span>` : `<b>${costMMK} KS</b>`;
-                    let img = gData.image || defaultImg;
 
                     mobileCon.innerHTML += `<div class="card" style="padding:16px; margin-bottom:12px; border-radius:14px; display:flex; flex-direction:column; gap:12px;">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -709,7 +710,7 @@
 
         window.confirmClearSales = function() { window.showConfirm("Clear Sales", "Reset daily transaction history for today?", () => { state.sales = state.sales.filter(s => s.date !== new Date().toLocaleDateString()); saveDataToCloud(); window.renderSales(); window.showToast("Cleared"); }); };
 
-        // ================= TELEGRAM =================
+        // ================= TELEGRAM (HTML PARSE) =================
         window.sendTelegram = async function() {
             var token = state.profile.tgToken; var chatId = state.profile.tgChatId;
             if(!token || !chatId) { window.switchView('settings'); return window.showToast("Set Telegram Keys in Settings", "error"); }
