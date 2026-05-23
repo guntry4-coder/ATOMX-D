@@ -1196,7 +1196,7 @@
                 const packages = items
                     .filter(itm => parseFloat(itm.sell) > 0)
                     .map(itm => ({
-                        d: itm.name + (itm.combo ? ' (' + itm.combo + ')' : ''),
+                        d: itm.name,  // name ပဲ — combo မပါ
                         p: parseInt(itm.sell) || 0
                         // costMMK, costRS ထည့်မသွားပါ
                     }));
